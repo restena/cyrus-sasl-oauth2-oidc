@@ -41,6 +41,17 @@ sudo yum install libcurl-devel openssl-devel
 ### Build and Install
 
 ```bash
+# Optional: Install liboauth2 from source (required for plugin build, if no package available)
+git clone https://github.com/OpenIDC/liboauth2.git /tmp/liboauth2 && \
+cd /tmp/liboauth2 && \
+./autogen.sh && \
+./configure --with-apache=no --prefix=/usr/local && \
+make && \
+make install && \
+ldconfig && \
+cd / && \
+rm -rf /tmp/liboauth2
+
 # Clone or extract the source
 cd cyrus-sasl-oauth2-oidc
 
