@@ -1,0 +1,200 @@
+Splint 3.1.2 --- 21 Feb 2021
+
+oauth2_client.c: (in function oauth2_generate_xoauth2)
+oauth2_client.c:40:40: Null storage passed as non-null param:
+                          oauth2_base64_encode (NULL, ...)
+  A possibly null pointer is passed as a parameter corresponding to a formal
+  parameter with no /*@null@*/ annotation.  If NULL may be used for this
+  parameter, add a /*@null@*/ annotation to the function parameter declaration.
+  (Use -nullpass to inhibit warning)
+oauth2_client.c:49:5: Assignment of size_t to unsigned int:
+                         *outputlen = encoded_len
+  To allow arbitrary integral types to match any integral type, use
+  +matchanyintegral.
+oauth2_client.c:48:5: Possible out-of-bounds store: *output
+    Unable to resolve constraint:
+    requires maxSet(output @ oauth2_client.c:48:6) >= 0
+     needed to satisfy precondition:
+    requires maxSet(output @ oauth2_client.c:48:6) >= 0
+  A memory write may write to an address beyond the allocated buffer. (Use
+  -boundswrite to inhibit warning)
+oauth2_client.c:49:5: Possible out-of-bounds store: *outputlen
+    Unable to resolve constraint:
+    requires maxSet(outputlen @ oauth2_client.c:49:6) >= 0
+     needed to satisfy precondition:
+    requires maxSet(outputlen @ oauth2_client.c:49:6) >= 0
+oauth2_client.c: (in function oauth2_generate_oauthbearer)
+oauth2_client.c:78:5: Assignment of size_t to unsigned int:
+                         *outputlen = strlen(auth_string)
+oauth2_client.c:77:5: Possible out-of-bounds store: *output
+    Unable to resolve constraint:
+    requires maxSet(output @ oauth2_client.c:77:6) >= 0
+     needed to satisfy precondition:
+    requires maxSet(output @ oauth2_client.c:77:6) >= 0
+oauth2_client.c:78:5: Possible out-of-bounds store: *outputlen
+    Unable to resolve constraint:
+    requires maxSet(outputlen @ oauth2_client.c:78:6) >= 0
+     needed to satisfy precondition:
+    requires maxSet(outputlen @ oauth2_client.c:78:6) >= 0
+oauth2_client.c: (in function oauth2_client_init)
+oauth2_client.c:90:40: Test expression for conditional not boolean, type int:
+                          config->debug
+  Test expression type is not boolean or int. (Use -predboolint to inhibit
+  warning)
+oauth2_client.c:91:57: Null storage passed as non-null param:
+                          oauth2_log_init (..., NULL)
+oauth2_client.c: (in function oauth2_client_step)
+oauth2_client.c:117:20: Function returns with null storage derivable from
+                           parameter *prompt_need
+  A possibly null pointer is reachable from a parameter or global variable that
+  is not declared using a /*@null@*/ annotation. (Use -nullstate to inhibit
+  warning)
+   oauth2_client.c:113:20: Storage *prompt_need becomes null
+oauth2_client.c:117:20: Function returns with null storage derivable from
+                           parameter *clientout
+   oauth2_client.c:111:18: Storage *clientout becomes null
+oauth2_client.c:128:36: Call to non-function (type sasl_malloc_t *):
+                           utils->malloc
+  Types are incompatible. (Use -type to inhibit warning)
+oauth2_client.c:137:9: Observer storage assigned to unqualified reference:
+                          prompts[0].challenge = "Username"
+  Observer storage is transferred to a non-observer reference. (Use
+  -observertrans to inhibit warning)
+   oauth2_client.c:137:32: Storage becomes observer
+oauth2_client.c:138:9: Observer storage assigned to unqualified reference:
+                          prompts[0].prompt = "Please enter username: "
+   oauth2_client.c:138:29: Storage becomes observer
+oauth2_client.c:143:9: Observer storage assigned to unqualified reference:
+                          prompts[1].challenge = "Access Token"
+   oauth2_client.c:143:32: Storage becomes observer
+oauth2_client.c:144:9: Observer storage assigned to unqualified reference:
+    prompts[1].prompt = "Please enter OAuth2 access token: "
+   oauth2_client.c:144:29: Storage becomes observer
+oauth2_client.c:151:18: Observer storage *prompt_need[0].challenge reachable
+                           from unqualified parameter
+   oauth2_client.c:137:32: Storage *prompt_need[0].challenge becomes observer
+oauth2_client.c:151:18: Observer storage *prompt_need[0].prompt reachable from
+                           unqualified parameter
+   oauth2_client.c:138:29: Storage *prompt_need[0].prompt becomes observer
+oauth2_client.c:151:18: Function returns with null storage derivable from
+                           parameter *prompt_need[0].defresult
+   oauth2_client.c:139:32: Storage *prompt_need[0].defresult becomes null
+oauth2_client.c:182:9: Call to non-function (type sasl_free_t *): utils->free
+oauth2_client.c:183:9: Implicitly only storage oparams->user (type char *) not
+                          released before assignment: oparams->user = NULL
+  A memory leak has been detected. Only-qualified storage is not released
+  before the last reference to it is lost. (Use -mustfreeonly to inhibit
+  warning)
+oauth2_client.c:186:9: Call to non-function (type sasl_free_t *): utils->free
+oauth2_client.c:187:9: Implicitly only storage oparams->authid (type char *)
+    not released before assignment: oparams->authid = NULL
+oauth2_client.c:192:23: Call to non-function (type sasl_malloc_t *):
+                           utils->malloc
+oauth2_client.c:193:25: Call to non-function (type sasl_malloc_t *):
+                           utils->malloc
+oauth2_client.c:209:14: Function returns with null storage derivable from
+                           parameter *clientout
+   oauth2_client.c:168:18: Storage *clientout becomes null
+oauth2_client.c:209:14: Function returns with null storage derivable from
+                           parameter oparams->encode
+   oauth2_client.c:177:23: Storage oparams->encode becomes null
+oauth2_client.c:209:14: Function returns with null storage derivable from
+                           parameter oparams->decode
+   oauth2_client.c:178:23: Storage oparams->decode becomes null
+oauth2_client.c:209:14: Function returns with null storage derivable from
+                           parameter oparams->user
+   oauth2_client.c:183:25: Storage oparams->user becomes null
+oauth2_client.c:209:14: Function returns with null storage derivable from
+                           parameter oparams->authid
+   oauth2_client.c:187:27: Storage oparams->authid becomes null
+oauth2_client.c:133:9: Possible out-of-bounds store:
+    memset(prompts, 0, 3 * sizeof(sasl_interact_t))
+    Unable to resolve constraint:
+    requires maxSet( @ oauth2_client.c:128:79) >= 3 * sizeof(sasl_interact_t) @
+    oauth2_client.c:133:28 + -1
+     needed to satisfy precondition:
+    requires maxSet(prompts @ oauth2_client.c:133:16) >= 3 *
+    sizeof(sasl_interact_t) @ oauth2_client.c:133:28 + -1
+     derived from memset precondition: requires maxSet(<parameter 1>) >=
+    <parameter 3> + -1
+oauth2_client.c:148:9: Possible out-of-bounds store: prompts[2]
+    Unable to resolve constraint:
+    requires maxSet( @ oauth2_client.c:128:79) >= 2
+     needed to satisfy precondition:
+    requires maxSet(prompts @ oauth2_client.c:148:9) >= 2
+oauth2_client.c:150:9: Possible out-of-bounds store: *prompt_need
+    Unable to resolve constraint:
+    requires maxSet(prompt_need @ oauth2_client.c:150:10) >= 0
+     needed to satisfy precondition:
+    requires maxSet(prompt_need @ oauth2_client.c:150:10) >= 0
+oauth2_client.c:168:5: Possible out-of-bounds store: *clientout
+    Unable to resolve constraint:
+    requires maxSet(clientout @ oauth2_client.c:168:6) >= 0
+     needed to satisfy precondition:
+    requires maxSet(clientout @ oauth2_client.c:168:6) >= 0
+oauth2_client.c:169:5: Possible out-of-bounds store: *clientoutlen
+    Unable to resolve constraint:
+    requires maxSet(clientoutlen @ oauth2_client.c:169:6) >= 0
+     needed to satisfy precondition:
+    requires maxSet(clientoutlen @ oauth2_client.c:169:6) >= 0
+oauth2_client.c:202:9: Possible out-of-bounds store: authid_copy[username_len]
+    Unable to resolve constraint:
+    requires maxSet( @ oauth2_client.c:193:57) >= maxRead(context->username @
+    oauth2_client.c:191:34)
+     needed to satisfy precondition:
+    requires maxSet(authid_copy @ oauth2_client.c:202:9) >= username_len @
+    oauth2_client.c:202:21
+oauth2_client.c: (in function oauth2_cleanup_context_fields)
+oauth2_client.c:215:9: Call to non-function (type sasl_free_t *): utils->free
+oauth2_client.c:221:9: Call to non-function (type sasl_free_t *): utils->free
+oauth2_client.c:220:9: Possible out-of-bounds store:
+    memset(access_token, 0, strlen(access_token))
+    Unable to resolve constraint:
+    requires maxSet(access_token @ oauth2_client.c:220:16) >=
+    maxRead(access_token @ oauth2_client.c:220:40) + -1
+     needed to satisfy precondition:
+    requires maxSet(access_token @ oauth2_client.c:220:16) >=
+    maxRead(access_token @ oauth2_client.c:220:40) + -1
+     derived from memset precondition: requires maxSet(<parameter 1>) >=
+    <parameter 3> + -1
+oauth2_client.c: (in function oauth2_client_dispose)
+oauth2_client.c:231:5: Call to non-function (type sasl_free_t *): utils->free
+oauth2_client.c: (in function oauth2_client_mech_new)
+oauth2_client.c:247:15: Call to non-function (type sasl_malloc_t *):
+                           utils->malloc
+oauth2_client.c:254:5: Implicitly only storage context->config (type struct
+    oauth2_config *) not released before assignment:
+    context->config = (oauth2_config_t *)glob_context
+oauth2_client.c:254:5: Implicitly temp storage glob_context assigned to
+    implicitly only: context->config = (oauth2_config_t *)glob_context
+  Temp storage (associated with a formal parameter) is transferred to a
+  non-temporary reference. The storage may be released or new aliases created.
+  (Use -temptrans to inhibit warning)
+oauth2_client.c:253:5: Possible out-of-bounds store:
+    memset(context, 0, sizeof(oauth2_client_context_t))
+    Unable to resolve constraint:
+    requires maxSet(context @ oauth2_client.c:253:12) >= sizeof(oauth2_client_co
+    ntext_t) @ oauth2_client.c:253:56 + -1
+     needed to satisfy precondition:
+    requires maxSet(context @ oauth2_client.c:253:12) >= sizeof(oauth2_client_co
+    ntext_t) @ oauth2_client.c:253:56 + -1
+     derived from memset precondition: requires maxSet(<parameter 1>) >=
+    <parameter 3> + -1
+oauth2_client.c:257:5: Possible out-of-bounds store: *conn_context
+    Unable to resolve constraint:
+    requires maxSet(conn_context @ oauth2_client.c:257:6) >= 0
+     needed to satisfy precondition:
+    requires maxSet(conn_context @ oauth2_client.c:257:6) >= 0
+oauth2_config.c:18:19: Function oauth2_parse_string_list inconsistently
+    redeclared to return possibly null storage, previously declared without
+    null qualifier
+  A function, variable or constant is redefined with a different type. (Use
+  -incondefs to inhibit warning)
+   oauth2_plugin.h:95:8: Declaration of oauth2_parse_string_list
+oauth2_config.c: (in function oauth2_parse_string_list)
+oauth2_config.c:25:18: Unrecognized identifier: strdup
+  Identifier used in code has not been declared. (Use -unrecog to inhibit
+  warning)
+oauth2_config.c:52:21: Parse Error. (For help on parse errors, see splint -help
+             parseerrors.)
+*** Cannot continue.

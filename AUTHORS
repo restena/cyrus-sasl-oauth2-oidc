@@ -1,0 +1,17 @@
+Cyrus SASL OAuth2/OIDC Plugin Authors
+====================================
+
+Primary Author:
+  Stephane Benoit <stefb@wizzz.net>
+
+Contributors:
+  j
+
+Special Thanks:
+  - OpenIDC community for liboauth2
+  - Cyrus SASL team for the SASL framework
+  - Authentik team for OIDC implementation reference
+
+This plugin was developed to provide native OAuth2/OpenID Connect support
+for SASL-enabled mail servers, replacing custom fallback mechanisms with
+a comprehensive liboauth2-based solution.

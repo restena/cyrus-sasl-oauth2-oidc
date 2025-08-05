@@ -1,0 +1,65 @@
+# Autotools generated files
+/autom4te.cache/
+/aclocal.m4
+/compile
+/config.guess
+/config.h
+/config.h.in
+/config.log
+/config.status
+/config.sub
+/configure
+/depcomp
+/install-sh
+/libtool
+/ltmain.sh
+/missing
+/stamp-h1
+/m4/
+
+# Makefiles
+Makefile
+Makefile.in
+.deps/
+.libs/
+
+# Build artifacts
+*.o
+*.lo
+*.la
+*.so
+*.so.*
+*.a
+
+# Test files
+test-*
+*.test
+
+# Editor and IDE files
+*~
+*.swp
+*.swo
+.vscode/
+.idea/
+*.sublime-*
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Package files
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.deb
+*.rpm
+*.pkg
+
+# Documentation build
+docs/_build/
+*.pdf
+
+# Temporary files
+*.tmp
+*.temp
+security-reports/*

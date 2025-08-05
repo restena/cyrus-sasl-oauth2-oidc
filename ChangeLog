@@ -1,0 +1,30 @@
+Cyrus SASL OAuth2/OIDC Plugin ChangeLog
+======================================
+
+Version 1.0.0 (2025-08-04)
+---------------------------
+* Initial release
+* Native OAuth2/OIDC support using liboauth2
+* Support for XOAUTH2 and OAUTHBEARER SASL mechanisms
+* Automatic OIDC discovery with configurable caching
+* JWT signature verification using JWKS
+* Multi-provider support (Authentik, Keycloak, Azure AD, Google, etc.)
+* Caching using liboauth2
+* Comprehensive configuration options
+* Security-focused implementation with token memory clearing
+* Complete documentation and examples
+* Autotools-based build system
+* MIT license
+
+Features:
+* oauth2_config.c - Configuration management with validation
+* oauth2_server.c - Server-side JWT token validation
+* oauth2_client.c - Client-side authentication string generation
+* oauth2_init.c - SASL plugin initialization and registration
+
+Migration from SciTokens-based implementations:
+* Simplified configuration (single discovery URL)
+* Better error handling and logging
+* Enhanced security with signature verification
+* Improved performance with liboauth2 caching
+* Broader provider compatibility

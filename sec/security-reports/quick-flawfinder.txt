@@ -1,0 +1,47 @@
+Flawfinder version 2.0.19, (C) 2001-2019 David A. Wheeler.
+Number of rules (primarily dangerous function names) in C/C++ ruleset: 222
+Examining oauth2_client.c
+Examining oauth2_config.c
+Examining oauth2_init.c
+Examining oauth2_server.c
+
+FINAL RESULTS:
+
+oauth2_config.c:84:  [3] (buffer) getopt:
+  Some older implementations do not protect against internal buffer overflows
+  (CWE-120, CWE-20). Check implementation on installation, or limit the size
+  of all string inputs.
+oauth2_config.c:94:  [3] (buffer) getopt:
+  Some older implementations do not protect against internal buffer overflows
+  (CWE-120, CWE-20). Check implementation on installation, or limit the size
+  of all string inputs.
+oauth2_config.c:123:  [3] (buffer) getopt:
+  Some older implementations do not protect against internal buffer overflows
+  (CWE-120, CWE-20). Check implementation on installation, or limit the size
+  of all string inputs.
+oauth2_server.c:38:  [2] (buffer) memcpy:
+  Does not check for buffer overflows when copying to destination (CWE-120).
+  Make sure destination can always hold the source data.
+oauth2_server.c:357:  [2] (buffer) memcpy:
+  Does not check for buffer overflows when copying to destination (CWE-120).
+  Make sure destination can always hold the source data.
+
+ANALYSIS SUMMARY:
+
+Hits = 5
+Lines analyzed = 1456 in approximately 0.01 seconds (165912 lines/second)
+Physical Source Lines of Code (SLOC) = 1065
+Hits@level = [0]   3 [1]  30 [2]   2 [3]   3 [4]   0 [5]   0
+Hits@level+ = [0+]  38 [1+]  35 [2+]   5 [3+]   3 [4+]   0 [5+]   0
+Hits/KSLOC@level+ = [0+] 35.6808 [1+] 32.8638 [2+] 4.69484 [3+] 2.8169 [4+]   0 [5+]   0
+Minimum risk level = 2
+
+Not every hit is necessarily a security vulnerability.
+You can inhibit a report by adding a comment in this form:
+// flawfinder: ignore
+Make *sure* it's a false positive!
+You can use the option --neverignore to show these.
+
+There may be other security vulnerabilities; review your code!
+See 'Secure Programming HOWTO'
+(https://dwheeler.com/secure-programs) for more information.

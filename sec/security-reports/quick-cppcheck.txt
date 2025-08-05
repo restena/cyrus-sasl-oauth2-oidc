@@ -1,0 +1,3 @@
+oauth2_server.c:493:68: style: Parameter 'config' can be declared as pointer to const [constParameter]
+int oauth2_server_init(const sasl_utils_t *utils, oauth2_config_t *config) {
+                                                                   ^

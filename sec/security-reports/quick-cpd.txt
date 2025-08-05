@@ -1,0 +1,793 @@
+Found a 5 line (198 tokens) duplication in the following files: 
+Starting at line 20 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+
+    41,42,43,44,45,46,47,48,49,50,51,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+
+=====================================================================
+Found a 3 line (129 tokens) duplication in the following files: 
+Starting at line 13 of /workspace/tests/unit/test_framework.c
+Starting at line 20 of /workspace/tests/unit/test_framework.c
+Starting at line 20 of /workspace/tests/unit/test_framework.c
+Starting at line 20 of /workspace/tests/unit/test_framework.c
+Starting at line 20 of /workspace/tests/unit/test_framework.c
+Starting at line 20 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 21 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 22 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 23 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 24 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 25 of /workspace/tests/unit/test_framework.c
+Starting at line 26 of /workspace/tests/unit/test_framework.c
+Starting at line 26 of /workspace/tests/unit/test_framework.c
+Starting at line 26 of /workspace/tests/unit/test_framework.c
+Starting at line 26 of /workspace/tests/unit/test_framework.c
+Starting at line 26 of /workspace/tests/unit/test_framework.c
+
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,62,-1,-1,-1,63,
+
+=====================================================================
+Found a 3 line (128 tokens) duplication in the following files: 
+Starting at line 13 of /workspace/tests/unit/test_framework.c
+Starting at line 26 of /workspace/tests/unit/test_framework.c
+
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,62,-1,-1,-1,63,
+
+=====================================================================
+Found a 3 line (127 tokens) duplication in the following files: 
+Starting at line 13 of /workspace/tests/unit/test_framework.c
+Starting at line 20 of /workspace/tests/unit/test_framework.c
+
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,62,-1,-1,-1,63,
+
+=====================================================================
+Found a 28 line (108 tokens) duplication in the following files: 
+Starting at line 29 of /workspace/tests/unit/test_plugin.c
+Starting at line 266 of /workspace/tests/unit/test_plugin.c
+
+int test_server_plugin_init() {
+    sasl_utils_t utils = {
+        .getopt = mock_getopt,
+        .malloc = mock_malloc,
+        .free = mock_free,
+        .getopt_context = NULL,
+        .conn = NULL,
+        .log = mock_log
+    };
+    
+    int out_version;
+    sasl_server_plug_t *pluglist;
+    int plugcount;
+    
+    /* Set up minimal configuration */
+    mock_config_clear();
+    mock_config_set("oauth2", "oauth2_issuers", "https://test.issuer.com");
+    mock_config_set("oauth2", "oauth2_audiences", "test_audience");
+    mock_config_set("oauth2", "oauth2_client_id", "test_client");
+    
+    /* Test plugin initialization */
+    int result = sasl_server_plug_init(&utils, 
+                                         4, /* SASL version */
+                                         &out_version,
+                                         &pluglist,
+                                         &plugcount);
+    
+    TEST_ASSERT_EQ(0, result, "Server plugin init should succeed");
+
+=====================================================================
+Found a 28 line (105 tokens) duplication in the following files: 
+Starting at line 29 of /workspace/tests/unit/test_plugin.c
+Starting at line 219 of /workspace/tests/unit/test_plugin.c
+
+int test_server_plugin_init() {
+    sasl_utils_t utils = {
+        .getopt = mock_getopt,
+        .malloc = mock_malloc,
+        .free = mock_free,
+        .getopt_context = NULL,
+        .conn = NULL,
+        .log = mock_log
+    };
+    
+    int out_version;
+    sasl_server_plug_t *pluglist;
+    int plugcount;
+    
+    /* Set up minimal configuration */
+    mock_config_clear();
+    mock_config_set("oauth2", "oauth2_issuers", "https://test.issuer.com");
+    mock_config_set("oauth2", "oauth2_audiences", "test_audience");
+    mock_config_set("oauth2", "oauth2_client_id", "test_client");
+    
+    /* Test plugin initialization */
+    int result = sasl_server_plug_init(&utils, 
+                                         4, /* SASL version */
+                                         &out_version,
+                                         &pluglist,
+                                         &plugcount);
+    
+    TEST_ASSERT_EQ(0, result, "Server plugin init should succeed");
+
+=====================================================================
+Found a 3 line (97 tokens) duplication in the following files: 
+Starting at line 13 of /workspace/tests/unit/test_framework.c
+Starting at line 20 of /workspace/tests/unit/test_framework.c
+
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,62,-1,-1,-1,63,
+
+=====================================================================
+Found a 18 line (95 tokens) duplication in the following files: 
+Starting at line 78 of /workspace/tests/unit/test_plugin.c
+Starting at line 129 of /workspace/tests/unit/test_plugin.c
+
+    TEST_ASSERT_NOT_NULL(pluglist[0].mech_new, "XOAUTH2 mech_new should not be NULL");
+    TEST_ASSERT_NOT_NULL(pluglist[0].mech_step, "XOAUTH2 mech_step should not be NULL");
+    TEST_ASSERT_NOT_NULL(pluglist[0].mech_dispose, "XOAUTH2 mech_dispose should not be NULL");
+    
+    /* Check second mechanism (OAUTHBEARER) */
+    TEST_ASSERT_STR_EQ("OAUTHBEARER", pluglist[1].mech_name, "Second mechanism should be OAUTHBEARER");
+    TEST_ASSERT_NOT_NULL(pluglist[1].mech_new, "OAUTHBEARER mech_new should not be NULL");
+    TEST_ASSERT_NOT_NULL(pluglist[1].mech_step, "OAUTHBEARER mech_step should not be NULL");
+    TEST_ASSERT_NOT_NULL(pluglist[1].mech_dispose, "OAUTHBEARER mech_dispose should not be NULL");
+    
+    /* Cleanup */
+    mock_config_clear();
+    
+    return 0;
+}
+
+/* Test client plugin initialization */
+int test_client_plugin_init() {
+
+=====================================================================
+Found a 18 line (70 tokens) duplication in the following files: 
+Starting at line 29 of /workspace/tests/unit/test_plugin.c
+Starting at line 181 of /workspace/tests/unit/test_plugin.c
+
+int test_server_plugin_init() {
+    sasl_utils_t utils = {
+        .getopt = mock_getopt,
+        .malloc = mock_malloc,
+        .free = mock_free,
+        .getopt_context = NULL,
+        .conn = NULL,
+        .log = mock_log
+    };
+    
+    int out_version;
+    sasl_server_plug_t *pluglist;
+    int plugcount;
+    
+    /* Set up minimal configuration */
+    mock_config_clear();
+    mock_config_set("oauth2", "oauth2_issuers", "https://test.issuer.com");
+    mock_config_set("oauth2", "oauth2_audiences", "test_audience");
+
+=====================================================================
+Found a 2 line (67 tokens) duplication in the following files: 
+Starting at line 14 of /workspace/tests/unit/test_framework.c
+Starting at line 20 of /workspace/tests/unit/test_framework.c
+
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,62,-1,-1,-1,63,
+
+=====================================================================
+Found a 19 line (64 tokens) duplication in the following files: 
+Starting at line 207 of /workspace/oauth2_client.c
+Starting at line 599 of /workspace/oauth2_server.c
+
+                   context->username);
+    
+    return SASL_OK;
+}
+
+/* Common cleanup utility for OAuth2 contexts */
+static void oauth2_cleanup_context_fields(char *username, char *access_token, const sasl_utils_t *utils) {
+    if (username) {
+        utils->free(username);
+    }
+    
+    if (access_token) {
+        /* Clear token from memory for security */
+        memset(access_token, 0, strlen(access_token));
+        utils->free(access_token);
+    }
+}
+
+void oauth2_client_dispose(void *conn_context, const sasl_utils_t *utils) {
+
+=====================================================================
+Found a 2 line (63 tokens) duplication in the following files: 
+Starting at line 13 of /workspace/tests/unit/test_framework.c
+Starting at line 14 of /workspace/tests/unit/test_framework.c
+
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+
+=====================================================================
+Found a 17 line (58 tokens) duplication in the following files: 
+Starting at line 29 of /workspace/tests/unit/test_plugin.c
+Starting at line 317 of /workspace/tests/unit/test_plugin.c
+
+int test_server_plugin_init() {
+    sasl_utils_t utils = {
+        .getopt = mock_getopt,
+        .malloc = mock_malloc,
+        .free = mock_free,
+        .getopt_context = NULL,
+        .conn = NULL,
+        .log = mock_log
+    };
+    
+    int out_version;
+    sasl_server_plug_t *pluglist;
+    int plugcount;
+    
+    /* Set up minimal configuration */
+    mock_config_clear();
+    mock_config_set("oauth2", "oauth2_issuers", "https://test.issuer.com");
+
+=====================================================================
+Found a 8 line (54 tokens) duplication in the following files: 
+Starting at line 57 of /workspace/tests/unit/test_config.c
+Starting at line 68 of /workspace/tests/unit/test_config.c
+
+    TEST_ASSERT_NOT_NULL(result, "Should parse items with extra spaces successfully");
+    TEST_ASSERT(count == 3, "Should have three items");
+    TEST_ASSERT_STR_EQ("item1", result[0], "First item should match");
+    TEST_ASSERT_STR_EQ("item2", result[1], "Second item should match");
+    TEST_ASSERT_STR_EQ("item3", result[2], "Third item should match");
+    
+    /* Cleanup */
+    oauth2_free_string_list(result, count);
+
+=====================================================================
+Found a 16 line (52 tokens) duplication in the following files: 
+Starting at line 29 of /workspace/tests/unit/test_plugin.c
+Starting at line 146 of /workspace/tests/unit/test_plugin.c
+
+int test_server_plugin_init() {
+    sasl_utils_t utils = {
+        .getopt = mock_getopt,
+        .malloc = mock_malloc,
+        .free = mock_free,
+        .getopt_context = NULL,
+        .conn = NULL,
+        .log = mock_log
+    };
+    
+    int out_version;
+    sasl_server_plug_t *pluglist;
+    int plugcount;
+    
+    /* Set up minimal configuration */
+    mock_config_clear();
+
+=====================================================================
+Found a 10 line (49 tokens) duplication in the following files: 
+Starting at line 30 of /workspace/tests/unit/test_config.c
+Starting at line 58 of /workspace/tests/unit/test_config.c
+
+    TEST_ASSERT_NOT_NULL(result[2], "Third item should not be NULL");
+    TEST_ASSERT_STR_EQ("item1", result[0], "First item should match");
+    TEST_ASSERT_STR_EQ("item2", result[1], "Second item should match");
+    TEST_ASSERT_STR_EQ("item3", result[2], "Third item should match");
+    
+    /* Cleanup */
+    oauth2_free_string_list(result, count);
+    
+    /* Test empty string */
+    result = oauth2_parse_string_list("", &count);
+
+=====================================================================
+Found a 6 line (46 tokens) duplication in the following files: 
+Starting at line 39 of /workspace/tests/unit/mock_sasl.h
+Starting at line 101 of /workspace/tests/unit/test_framework.h
+
+char *mock_config_get(const char *key);
+int mock_getopt(void *context, const char *plugin_name, const char *option,
+                const char **result, unsigned *len);
+void *mock_malloc(size_t size);
+void mock_free(void *ptr);
+void mock_reset_malloc_counts(void);
+
+=====================================================================
+Found a 8 line (45 tokens) duplication in the following files: 
+Starting at line 13 of /workspace/oauth2_client.c
+Starting at line 55 of /workspace/oauth2_client.c
+
+static int oauth2_generate_xoauth2(const char *username, const char *token,
+                                  char **output, unsigned *outputlen) {
+    if (!username || !token || !output || !outputlen) {
+        return SASL_BADPARAM;
+    }
+    
+    /* Format: user=username^Aauth=Bearer token^A^A */
+    size_t auth_len = strlen("user=") + strlen(username) + 1 + /* ^A */
+
+=====================================================================
+Found a 9 line (45 tokens) duplication in the following files: 
+Starting at line 239 of /workspace/oauth2_client.c
+Starting at line 632 of /workspace/oauth2_server.c
+
+    oauth2_client_context_t *context;
+    const sasl_utils_t *utils = params->utils;
+    
+    if (!glob_context) {
+        utils->seterror(params->utils->conn, 0, "No global context available");
+        return SASL_FAIL;
+    }
+    
+    context = utils->malloc(sizeof(oauth2_client_context_t));
+
+=====================================================================
+Found a 5 line (45 tokens) duplication in the following files: 
+Starting at line 90 of /workspace/oauth2_config.c
+Starting at line 119 of /workspace/oauth2_config.c
+
+static int oauth2_config_get_int(const sasl_utils_t *utils, 
+                                const char *key, 
+                                int default_value) {
+    const char *value;
+    if (utils->getopt(utils->getopt_context, "oauth2", key, &value, NULL) == SASL_OK && value) {
+
+=====================================================================
+Found a 7 line (45 tokens) duplication in the following files: 
+Starting at line 30 of /workspace/tests/unit/test_config.c
+Starting at line 69 of /workspace/tests/unit/test_config.c
+
+    TEST_ASSERT_NOT_NULL(result[2], "Third item should not be NULL");
+    TEST_ASSERT_STR_EQ("item1", result[0], "First item should match");
+    TEST_ASSERT_STR_EQ("item2", result[1], "Second item should match");
+    TEST_ASSERT_STR_EQ("item3", result[2], "Third item should match");
+    
+    /* Cleanup */
+    oauth2_free_string_list(result, count);
+
+=====================================================================
+Found a 9 line (44 tokens) duplication in the following files: 
+Starting at line 85 of /workspace/oauth2_client.c
+Starting at line 231 of /workspace/oauth2_server.c
+
+        return SASL_BADPARAM;
+    }
+    
+    /* Initialize liboauth2 log context if not already done */
+    if (!config->oauth2_log) {
+        oauth2_log_level_t log_level = config->debug ? OAUTH2_LOG_TRACE1 : OAUTH2_LOG_WARN;
+        config->oauth2_log = oauth2_log_init(log_level, NULL);
+        if (!config->oauth2_log) {
+            OAUTH2_LOG_ERR(utils, "Failed to initialize OAuth2 log context for client");
+
+=====================================================================
+Found a 7 line (44 tokens) duplication in the following files: 
+Starting at line 440 of /workspace/oauth2_server.c
+Starting at line 453 of /workspace/oauth2_server.c
+
+            const char *token_audience = json_string_value(aud_json);
+            for (int i = 0; i < config->audiences_count; i++) {
+                if (strcmp(token_audience, config->audiences[i]) == 0) {
+                    audience_valid = true;
+                    break;
+                }
+            }
+
+=====================================================================
+Found a 11 line (41 tokens) duplication in the following files: 
+Starting at line 29 of /workspace/tests/unit/test_plugin.c
+Starting at line 95 of /workspace/tests/unit/test_plugin.c
+Starting at line 146 of /workspace/tests/unit/test_plugin.c
+Starting at line 181 of /workspace/tests/unit/test_plugin.c
+Starting at line 219 of /workspace/tests/unit/test_plugin.c
+Starting at line 266 of /workspace/tests/unit/test_plugin.c
+Starting at line 317 of /workspace/tests/unit/test_plugin.c
+
+int test_server_plugin_init() {
+    sasl_utils_t utils = {
+        .getopt = mock_getopt,
+        .malloc = mock_malloc,
+        .free = mock_free,
+        .getopt_context = NULL,
+        .conn = NULL,
+        .log = mock_log
+    };
+    
+    int out_version;
+
+=====================================================================
+Found a 11 line (40 tokens) duplication in the following files: 
+Starting at line 40 of /workspace/tests/unit/test_plugin.c
+Starting at line 106 of /workspace/tests/unit/test_plugin.c
+Starting at line 231 of /workspace/tests/unit/test_plugin.c
+Starting at line 278 of /workspace/tests/unit/test_plugin.c
+
+    sasl_server_plug_t *pluglist;
+    int plugcount;
+    
+    /* Set up minimal configuration */
+    mock_config_clear();
+    mock_config_set("oauth2", "oauth2_issuers", "https://test.issuer.com");
+    mock_config_set("oauth2", "oauth2_audiences", "test_audience");
+    mock_config_set("oauth2", "oauth2_client_id", "test_client");
+    
+    /* Test plugin initialization */
+    int result = sasl_server_plug_init(&utils, 
+
+=====================================================================
+Found a 5 line (39 tokens) duplication in the following files: 
+Starting at line 19 of /workspace/oauth2_server.c
+Starting at line 96 of /workspace/oauth2_server.c
+
+static int oauth2_parse_xoauth2(const sasl_utils_t *utils, const char *input, unsigned inputlen, 
+                               char **username, char **token) {
+    if (!input || inputlen == 0 || !username || !token) {
+        return SASL_BADPARAM;
+    }
+
+=====================================================================
+Found a 5 line (38 tokens) duplication in the following files: 
+Starting at line 102 of /workspace/oauth2_client.c
+Starting at line 113 of /workspace/oauth2_plugin.h
+
+int oauth2_client_step(void *conn_context, sasl_client_params_t *params,
+                       /*@unused@*/ const char *serverin, /*@unused@*/ unsigned serverinlen,
+                       sasl_interact_t **prompt_need,
+                       const char **clientout, unsigned *clientoutlen,
+                       sasl_out_params_t *oparams) {
+
+=====================================================================
+Found a 8 line (38 tokens) duplication in the following files: 
+Starting at line 262 of /workspace/oauth2_client.c
+Starting at line 132 of /workspace/oauth2_plugin.h
+
+int oauth2_client_mech_step(void *conn_context,
+                            sasl_client_params_t *params,
+                            const char *serverin,
+                            unsigned serverinlen,
+                            sasl_interact_t **prompt_need,
+                            const char **clientout,
+                            unsigned *clientoutlen,
+                            sasl_out_params_t *oparams) {
+
+=====================================================================
+Found a 9 line (38 tokens) duplication in the following files: 
+Starting at line 105 of /workspace/oauth2_init.c
+Starting at line 153 of /workspace/oauth2_init.c
+
+        utils->seterror(utils->conn, 0, "OAuth2: version mismatch");
+        return SASL_BADVERS;
+    }
+    
+    /* Initialize global configuration if not already done */
+    if (!global_config) {
+        global_config = oauth2_config_init(utils);
+        if (!global_config) {
+            utils->log(utils->conn, SASL_LOG_ERR, "oauth2_plugin: Failed to initialize configuration");
+
+=====================================================================
+Found a 5 line (37 tokens) duplication in the following files: 
+Starting at line 102 of /workspace/oauth2_client.c
+Starting at line 262 of /workspace/oauth2_client.c
+
+int oauth2_client_step(void *conn_context, sasl_client_params_t *params,
+                       /*@unused@*/ const char *serverin, /*@unused@*/ unsigned serverinlen,
+                       sasl_interact_t **prompt_need,
+                       const char **clientout, unsigned *clientoutlen,
+                       sasl_out_params_t *oparams) {
+
+=====================================================================
+Found a 10 line (37 tokens) duplication in the following files: 
+Starting at line 169 of /workspace/oauth2_client.c
+Starting at line 585 of /workspace/oauth2_server.c
+
+    *clientoutlen = auth_len;
+    
+    context->state = 1;
+    
+    /* Set output parameters */
+    oparams->doneflag = 1;
+    oparams->mech_ssf = 0; /* No security layer */
+    oparams->maxoutbuf = 0;
+    oparams->encode = NULL;
+    oparams->decode = NULL;
+
+=====================================================================
+Found a 2 line (37 tokens) duplication in the following files: 
+Starting at line 14 of /workspace/tests/unit/test_framework.c
+Starting at line 20 of /workspace/tests/unit/test_framework.c
+
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,62,-1,-1,-1,63,
+
+=====================================================================
+Found a 11 line (37 tokens) duplication in the following files: 
+Starting at line 46 of /workspace/tests/unit/test_plugin.c
+Starting at line 335 of /workspace/tests/unit/test_plugin.c
+
+    mock_config_set("oauth2", "oauth2_audiences", "test_audience");
+    mock_config_set("oauth2", "oauth2_client_id", "test_client");
+    
+    /* Test plugin initialization */
+    int result = sasl_server_plug_init(&utils, 
+                                         4, /* SASL version */
+                                         &out_version,
+                                         &pluglist,
+                                         &plugcount);
+    
+    TEST_ASSERT_EQ(0, result, "Server plugin init should succeed");
+
+=====================================================================
+Found a 11 line (37 tokens) duplication in the following files: 
+Starting at line 237 of /workspace/tests/unit/test_plugin.c
+Starting at line 335 of /workspace/tests/unit/test_plugin.c
+
+    mock_config_set("oauth2", "oauth2_audiences", "test_audience");
+    mock_config_set("oauth2", "oauth2_client_id", "test_client");
+    
+    /* Test with version 4 (should work) */
+    int result = sasl_server_plug_init(&utils, 
+                                         4, /* SASL version */
+                                         &out_version,
+                                         &pluglist,
+                                         &plugcount);
+    
+    TEST_ASSERT_EQ(0, result, "Server plugin init should succeed with version 4");
+
+=====================================================================
+Found a 11 line (37 tokens) duplication in the following files: 
+Starting at line 284 of /workspace/tests/unit/test_plugin.c
+Starting at line 335 of /workspace/tests/unit/test_plugin.c
+
+    mock_config_set("oauth2", "oauth2_audiences", "test_audience");
+    mock_config_set("oauth2", "oauth2_client_id", "test_client");
+    
+    /* Test plugin initialization */
+    int result = sasl_server_plug_init(&utils, 
+                                         4, /* SASL version */
+                                         &out_version,
+                                         &pluglist,
+                                         &plugcount);
+    
+    TEST_ASSERT_EQ(0, result, "Server plugin init should succeed");
+
+=====================================================================
+Found a 5 line (36 tokens) duplication in the following files: 
+Starting at line 102 of /workspace/oauth2_client.c
+Starting at line 113 of /workspace/oauth2_plugin.h
+Starting at line 132 of /workspace/oauth2_plugin.h
+
+int oauth2_client_step(void *conn_context, sasl_client_params_t *params,
+                       /*@unused@*/ const char *serverin, /*@unused@*/ unsigned serverinlen,
+                       sasl_interact_t **prompt_need,
+                       const char **clientout, unsigned *clientoutlen,
+                       sasl_out_params_t *oparams) {
+
+=====================================================================
+Found a 4 line (34 tokens) duplication in the following files: 
+Starting at line 82 of /workspace/oauth2_config.c
+Starting at line 121 of /workspace/oauth2_config.c
+
+                                           const char *default_value) {
+    const char *value;
+    if (utils->getopt(utils->getopt_context, "oauth2", key, &value, NULL) == SASL_OK && value) {
+        return value;  /* Return direct pointer - no strdup needed */
+
+=====================================================================
+Found a 17 line (34 tokens) duplication in the following files: 
+Starting at line 21 of /workspace/oauth2_init.c
+Starting at line 39 of /workspace/oauth2_init.c
+
+        OAUTH2_MECH_XOAUTH2,         /* mech_name */
+        0,                           /* max_ssf */
+        SASL_SEC_NOANONYMOUS
+        | SASL_SEC_PASS_CREDENTIALS, /* security_flags */
+        SASL_FEAT_WANT_CLIENT_FIRST 
+        | SASL_FEAT_ALLOWS_PROXY,    /* features */
+        NULL,                        /* glob_context */
+        &oauth2_server_mech_new,     /* mech_new */
+        &oauth2_server_mech_step,    /* mech_step */
+        &oauth2_server_mech_dispose, /* mech_dispose */
+        NULL,                        /* mech_free */
+        NULL,                        /* setpass */
+        NULL,                        /* user_query */
+        NULL,                        /* idle */
+        NULL,                        /* mech_avail */
+        NULL                         /* spare */
+    },
+
+=====================================================================
+Found a 10 line (33 tokens) duplication in the following files: 
+Starting at line 226 of /workspace/oauth2_client.c
+Starting at line 617 of /workspace/oauth2_server.c
+
+    oauth2_client_context_t *context = (oauth2_client_context_t*)conn_context;
+    
+    if (!context) return;
+    
+    oauth2_cleanup_context_fields(context->username, context->access_token, utils);
+    utils->free(context);
+}
+
+/* Client mechanism functions for SASL plugin interface */
+int oauth2_client_mech_new(void *glob_context,
+
+=====================================================================
+Found a 3 line (33 tokens) duplication in the following files: 
+Starting at line 82 of /workspace/oauth2_config.c
+Starting at line 92 of /workspace/oauth2_config.c
+
+                                           const char *default_value) {
+    const char *value;
+    if (utils->getopt(utils->getopt_context, "oauth2", key, &value, NULL) == SASL_OK && value) {
+
+=====================================================================
+Found a 4 line (33 tokens) duplication in the following files: 
+Starting at line 105 of /workspace/oauth2_plugin.h
+Starting at line 502 of /workspace/oauth2_server.c
+
+int oauth2_server_step(void *conn_context, sasl_server_params_t *params,
+                       const char *clientin, unsigned clientinlen,
+                       const char **serverout, unsigned *serveroutlen,
+                       sasl_out_params_t *oparams);
+
+=====================================================================
+Found a 5 line (33 tokens) duplication in the following files: 
+Starting at line 105 of /workspace/oauth2_plugin.h
+Starting at line 123 of /workspace/oauth2_plugin.h
+
+int oauth2_server_step(void *conn_context, sasl_server_params_t *params,
+                       const char *clientin, unsigned clientinlen,
+                       const char **serverout, unsigned *serveroutlen,
+                       sasl_out_params_t *oparams);
+void oauth2_server_dispose(void *conn_context, const sasl_utils_t *utils);
+
+=====================================================================
+Found a 4 line (33 tokens) duplication in the following files: 
+Starting at line 123 of /workspace/oauth2_plugin.h
+Starting at line 655 of /workspace/oauth2_server.c
+
+int oauth2_server_mech_step(void *conn_context, sasl_server_params_t *params,
+                            const char *clientin, unsigned clientinlen,
+                            const char **serverout, unsigned *serveroutlen,
+                            sasl_out_params_t *oparams);
+
+=====================================================================
+Found a 3 line (33 tokens) duplication in the following files: 
+Starting at line 191 of /workspace/tests/unit/test_config.c
+Starting at line 202 of /workspace/tests/unit/test_config.c
+
+    int ret2 = mock_getopt(NULL, "OAUTH2", OAUTH2_CONF_AUDIENCES, &aud, NULL);
+    TEST_ASSERT(ret1 == SASL_OK && ret2 == SASL_OK, "Should have config values");
+    TEST_ASSERT_NOT_NULL(issuer, "Should have issuer");
+
+=====================================================================
+Found a 16 line (32 tokens) duplication in the following files: 
+Starting at line 60 of /workspace/oauth2_init.c
+Starting at line 77 of /workspace/oauth2_init.c
+
+        OAUTH2_MECH_XOAUTH2,         /* mech_name */
+        0,                           /* max_ssf */
+        SASL_SEC_NOANONYMOUS
+        | SASL_SEC_PASS_CREDENTIALS, /* security_flags */
+        SASL_FEAT_WANT_CLIENT_FIRST 
+        | SASL_FEAT_ALLOWS_PROXY,    /* features */
+        NULL,                        /* required_prompts */
+        NULL,                        /* glob_context */
+        &oauth2_client_mech_new,     /* mech_new */
+        &oauth2_client_mech_step,    /* mech_step */
+        &oauth2_client_mech_dispose, /* mech_dispose */
+        NULL,                        /* mech_free */
+        NULL,                        /* idle */
+        NULL,                        /* spare */
+        NULL                         /* spare */
+    },
+
+=====================================================================
+Found a 4 line (31 tokens) duplication in the following files: 
+Starting at line 105 of /workspace/oauth2_plugin.h
+Starting at line 502 of /workspace/oauth2_server.c
+Starting at line 655 of /workspace/oauth2_server.c
+
+int oauth2_server_step(void *conn_context, sasl_server_params_t *params,
+                       const char *clientin, unsigned clientinlen,
+                       const char **serverout, unsigned *serveroutlen,
+                       sasl_out_params_t *oparams);
+
+=====================================================================
+Found a 6 line (30 tokens) duplication in the following files: 
+Starting at line 130 of /workspace/oauth2_server.c
+Starting at line 138 of /workspace/oauth2_server.c
+
+    if (ptr >= end) {
+        free(data);
+        if (*username) { free(*username); *username = NULL; }
+        return SASL_BADAUTH;
+    }
+    ptr++; /* Skip ^A */
+

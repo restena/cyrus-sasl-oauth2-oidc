@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  # Test Cyrus IMAP server with OAuth2 plugin
+  cyrus-test:
+    build:
+      context: ../../
+      dockerfile: ../cyrus-imapd/Dockerfile
+    ports:
+      - "2143:143"    # IMAP
+      - "2993:993"    # IMAPS
+    environment:
+      # OAuth2 test configuration
+      - XOAUTH2_ISSUERS=https://test.issuer.com
+      - XOAUTH2_AUDIENCES=test_audience
+      - XOAUTH2_CLIENT_ID=test_client_id
+      - XOAUTH2_USER_CLAIM=sub
+      - XOAUTH2_SCOPE=openid email profile
+      
+      # Cyrus configuration
+      - CYRUS_ADMIN=testadmin
+      - CYRUS_ADMIN_PASSWORD=testpass
+      - CYRUS_DOMAIN=test.local
+      
+      # SSL/TLS (self-signed for testing)
+      - TLS_SERVER_CERT=/etc/ssl/certs/ssl-cert-snakeoil.pem
+      - TLS_SERVER_KEY=/etc/ssl/private/ssl-cert-snakeoil.key
+      - TLS_CLIENT_CA_FILE=/etc/ssl/certs/ca-certificates.crt
+    volumes:
+      - cyrus_test_data:/var/lib/cyrus
+      - cyrus_test_spool:/var/spool/cyrus
+    networks:
+      - test_network
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "143"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Mock OAuth2 server for testing
+  oauth2-mock:
+    image: python:3.11-slim
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./mock_oauth2_server.py:/app/server.py
+    working_dir: /app
+    command: >
+      sh -c "
+        pip install flask PyJWT cryptography &&
+        python server.py
+      "
+    networks:
+      - test_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Test runner
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    depends_on:
+      cyrus-test:
+        condition: service_healthy
+      oauth2-mock:
+        condition: service_healthy
+    environment:
+      - TEST_IMAP_HOST=cyrus-test
+      - TEST_IMAP_PORT=143
+      - TEST_IMAP_SSL_PORT=993
+      - TEST_OAUTH2_ISSUER=http://oauth2-mock:8080
+      - TEST_OAUTH2_CLIENT_ID=test_client_id
+      - TEST_OAUTH2_AUDIENCE=test_audience
+      - TEST_USER=testuser@test.local
+    volumes:
+      - ./test_e2e.py:/app/test_e2e.py
+      - ./requirements.txt:/app/requirements.txt
+    networks:
+      - test_network
+    command: python test_e2e.py
+
+volumes:
+  cyrus_test_data:
+  cyrus_test_spool:
+
+networks:
+  test_network:
+    driver: bridge

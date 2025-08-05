@@ -1,0 +1,459 @@
+# Dockerfile for Security Analysis of cyrus-sasl-oauth2-oidc
+# Includes Cppcheck, Clang Static Analyzer, Splint, PMD/CPD, Flawfinder, RATS, OCLint
+FROM debian:bookworm-slim
+
+LABEL maintainer="stefb@wizzz.net"
+LABEL description="Security analysis environment for cyrus-sasl-oauth2-oidc"
+
+# Install base packages and build dependencies
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y install \
+    # Base system
+    build-essential \
+    wget \
+    curl \
+    git \
+    unzip \
+    python3 \
+    python3-pip \
+    openjdk-17-jdk \
+    # Build dependencies for the plugin
+    libssl-dev \
+    libldap2-dev \
+    libpcre2-dev \
+    libpcre3-dev \
+    libdb-dev \
+    libsasl2-modules \
+    libsasl2-modules-ldap \
+    libsasl2-dev \
+    pkg-config \
+    libtool \
+    libcurl4-openssl-dev \
+    libjson-c-dev \
+    libjansson-dev \
+    autoconf \
+    automake \
+    autotools-dev \
+    libcjose-dev \
+    libjwt-dev \
+    # Security analysis tools available in Debian
+    cppcheck \
+    clang \
+    clang-tools \
+    splint \
+    flawfinder \
+    # Additional analysis tools
+    valgrind \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install RATS from source (optional - if download fails, continue without it)
+RUN (wget -O /tmp/rats-2.4.tar.gz https://github.com/andrew-d/rough-auditing-tool-for-security/archive/refs/heads/master.tar.gz && \
+    cd /tmp && \
+    tar -xzf rats-2.4.tar.gz && \
+    cd rough-auditing-tool-for-security-master && \
+    ./configure --prefix=/usr/local && \
+    make && \
+    make install && \
+    cd / && \
+    rm -rf /tmp/rats-2.4* /tmp/rough-auditing-tool-for-security-master) || \
+    echo "RATS installation failed, continuing without it"
+
+# Install liboauth2 from source (required for plugin build)
+RUN git clone https://github.com/OpenIDC/liboauth2.git /tmp/liboauth2 && \
+    cd /tmp/liboauth2 && \
+    ./autogen.sh && \
+    ./configure --with-apache=no --prefix=/usr/local && \
+    make && \
+    make install && \
+    ldconfig && \
+    cd / && \
+    rm -rf /tmp/liboauth2
+
+# Install PMD with CPD (Copy-Paste Detector) - optional (updated to v7.16.0)
+RUN (wget -O /tmp/pmd-bin.zip https://github.com/pmd/pmd/releases/download/pmd_releases%2F7.16.0/pmd-dist-7.16.0-bin.zip && \
+    cd /opt && \
+    unzip /tmp/pmd-bin.zip && \
+    mv pmd-bin-7.16.0 pmd && \
+    ln -s /opt/pmd/bin/pmd /usr/local/bin/pmd && \
+    ln -s /opt/pmd/bin/cpd /usr/local/bin/cpd && \
+    rm /tmp/pmd-bin.zip) || \
+    echo "PMD installation failed, continuing without it"
+
+# Install OCLint (try to download, if fails, skip - not critical)
+RUN (wget -O /tmp/oclint.tar.xz https://github.com/oclint/oclint/releases/download/v22.02/oclint-22.02-x86_64-linux-5.15.39-ubuntu-20.04.tar.xz && \
+    cd /opt && \
+    tar -xf /tmp/oclint.tar.xz && \
+    mv oclint-22.02 oclint && \
+    ln -s /opt/oclint/bin/oclint /usr/local/bin/oclint && \
+    ln -s /opt/oclint/bin/oclint-json-compilation-database /usr/local/bin/oclint-json-compilation-database && \
+    rm /tmp/oclint.tar.xz) || echo "OCLint installation failed, continuing without it"
+
+# Skip Frama-C (not available in Debian Bookworm)
+# Advanced users can install it manually if needed
+
+# Create analysis scripts directory
+RUN mkdir -p /opt/security-analysis/scripts /opt/security-analysis/reports
+
+# Create comprehensive security analysis script
+RUN cat > /opt/security-analysis/scripts/analyze.sh << 'EOF'
+#!/bin/bash
+
+set -e
+
+PROJECT_DIR=${1:-"/workspace"}
+REPORTS_DIR="/opt/security-analysis/reports"
+
+if [ ! -d "$PROJECT_DIR" ]; then
+    echo "❌ Project directory $PROJECT_DIR not found"
+    exit 1
+fi
+
+cd "$PROJECT_DIR"
+
+# Ensure reports directory exists
+mkdir -p "$REPORTS_DIR"
+
+echo "🔍 Starting comprehensive security analysis for cyrus-sasl-oauth2-oidc"
+echo "📁 Project directory: $PROJECT_DIR"
+echo "📊 Reports directory: $REPORTS_DIR"
+echo
+
+# Build the project first (needed for some analyzers)
+echo "🔧 Building project..."
+if [ -f "autogen.sh" ]; then
+    ./autogen.sh
+fi
+
+if [ -f "configure" ]; then
+    PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH \
+    CPPFLAGS="-I/usr/local/include" \
+    LDFLAGS="-L/usr/local/lib" \
+    ./configure --with-oauth2-prefix=/usr/local || echo "⚠️ Configure failed, continuing..."
+fi
+
+if [ -f "Makefile" ]; then
+    make clean || true
+    make || echo "⚠️ Build failed, continuing with source analysis..."
+fi
+
+echo
+echo "1️⃣ Running Cppcheck (comprehensive C/C++ analysis)..."
+cppcheck \
+    --enable=all \
+    --inconclusive \
+    --force \
+    --xml \
+    --xml-version=2 \
+    --suppress=missingIncludeSystem \
+    --suppress=unusedFunction \
+    --check-config \
+    --platform=unix64 \
+    --std=c11 \
+    -I/usr/local/include \
+    -I/usr/include \
+    *.c \
+    2> "$REPORTS_DIR/cppcheck-report.xml" || true
+
+# Also generate text report
+cppcheck \
+    --enable=all \
+    --inconclusive \
+    --force \
+    --suppress=missingIncludeSystem \
+    --platform=unix64 \
+    --std=c11 \
+    -I/usr/local/include \
+    -I/usr/include \
+    *.c \
+    2> "$REPORTS_DIR/cppcheck-report.txt" || true
+
+echo "✅ Cppcheck analysis complete"
+
+echo
+echo "2️⃣ Running Clang Static Analyzer..."
+if [ -f "Makefile" ]; then
+    scan-build \
+        --use-analyzer=/usr/bin/clang \
+        --html-title="Cyrus SASL OAuth2 OIDC Security Analysis" \
+        -o "$REPORTS_DIR/clang-static-analyzer" \
+        make clean all || echo "⚠️ Clang static analyzer had issues"
+else
+    echo "⚠️ No Makefile found, skipping scan-build"
+fi
+echo "✅ Clang Static Analyzer complete"
+
+echo
+echo "3️⃣ Running Splint (security-focused analysis)..."
+splint \
+    +bounds \
+    +null \
+    +charint \
+    +ignoresigns \
+    +matchanyintegral \
+    +ignorequals \
+    -I/usr/local/include \
+    -I/usr/include \
+    -I. \
+    *.c \
+    > "$REPORTS_DIR/splint-report.txt" 2>&1 || true
+echo "✅ Splint analysis complete"
+
+echo
+echo "4️⃣ Running PMD CPD (Copy-Paste Detector) v7.16.0..."
+if [ -f "/opt/pmd/bin/pmd" ]; then
+    /opt/pmd/bin/pmd cpd \
+        --minimum-tokens 25 \
+        --dir . \
+        --language cpp \
+        --format text \
+        > "$REPORTS_DIR/cpd-report.txt" 2>&1 || true
+
+    # Also generate XML format
+    /opt/pmd/bin/pmd cpd \
+        --minimum-tokens 25 \
+        --dir . \
+        --language cpp \
+        --format xml \
+        > "$REPORTS_DIR/cpd-report.xml" 2>&1 || true
+    echo "✅ CPD analysis complete (PMD 7.16.0)"
+else
+    echo "⚠️ PMD CPD not available, skipping"
+    echo "PMD CPD not installed" > "$REPORTS_DIR/cpd-report.txt"
+fi
+
+echo
+echo "5️⃣ Running Flawfinder (vulnerability scanner)..."
+flawfinder \
+    --html \
+    --context \
+    --minlevel=0 \
+    *.c \
+    > "$REPORTS_DIR/flawfinder-report.html" 2>&1 || true
+
+# Also generate text report
+flawfinder \
+    --context \
+    --minlevel=0 \
+    *.c \
+    > "$REPORTS_DIR/flawfinder-report.txt" 2>&1 || true
+echo "✅ Flawfinder analysis complete"
+
+echo
+echo "6️⃣ Running RATS (security vulnerability scanner)..."
+if command -v rats >/dev/null 2>&1; then
+    rats \
+        -R html \
+        *.c \
+        -o "$REPORTS_DIR/rats-report.html" || true
+
+    # Also generate text report
+    rats \
+        *.c \
+        > "$REPORTS_DIR/rats-report.txt" 2>&1 || true
+    echo "✅ RATS analysis complete"
+else
+    echo "⚠️ RATS not available, skipping"
+    echo "RATS not installed" > "$REPORTS_DIR/rats-report.txt"
+fi
+
+echo
+echo "7️⃣ Running OCLint (code quality analysis)..."
+if command -v oclint >/dev/null 2>&1; then
+    if [ -f "compile_commands.json" ]; then
+        oclint-json-compilation-database \
+            -report-type html \
+            -o "$REPORTS_DIR/oclint-report.html" \
+            -- -rc LONG_LINE=200 \
+            -rc SHORT_VARIABLE_NAME=2 \
+            -rc NCSS_METHOD=50 || true
+    else
+        echo "⚠️ No compile_commands.json found, generating basic OCLint report"
+        oclint \
+            src/*.c \
+            -report-type html \
+            -o "$REPORTS_DIR/oclint-report.html" \
+            -- -I/usr/local/include -I/usr/include -I. || true
+    fi
+    echo "✅ OCLint analysis complete"
+else
+    echo "⚠️ OCLint not available, skipping"
+    echo "OCLint not installed" > "$REPORTS_DIR/oclint-report.txt"
+fi
+
+echo
+echo "8️⃣ Running additional security checks..."
+
+# Check for common security patterns
+echo "🔍 Searching for potentially unsafe functions..."
+grep -n -H \
+    -e "strcpy\|strcat\|sprintf\|gets\|scanf" \
+    -e "malloc\|free\|realloc\|calloc" \
+    -e "memcpy\|memmove\|memset" \
+    *.c *.h > "$REPORTS_DIR/unsafe-functions.txt" 2>&1 || true
+
+# Check for TODO/FIXME/XXX comments
+echo "📝 Searching for TODO/FIXME comments..."
+grep -n -H -i \
+    -e "TODO\|FIXME\|XXX\|HACK\|BUG" \
+    *.c *.h > "$REPORTS_DIR/todo-fixme.txt" 2>&1 || true
+
+echo "✅ Additional security checks complete"
+
+echo
+echo "9️⃣ Generating summary report..."
+cat > "$REPORTS_DIR/ANALYSIS_SUMMARY.md" << 'SUMMARY_EOF'
+# Security Analysis Summary for cyrus-sasl-oauth2-oidc
+
+Generated on: $(date)
+
+## Analysis Tools Used
+
+1. **Cppcheck** - Static analysis for C/C++
+   - Report: [cppcheck-report.txt](./cppcheck-report.txt) | [XML](./cppcheck-report.xml)
+
+2. **Clang Static Analyzer** - Deep static analysis
+   - Report: [clang-static-analyzer/](./clang-static-analyzer/)
+
+3. **Splint** - Security-focused static analysis
+   - Report: [splint-report.txt](./splint-report.txt)
+
+4. **PMD CPD** - Copy-paste detection
+   - Report: [cpd-report.txt](./cpd-report.txt) | [XML](./cpd-report.xml)
+
+5. **Flawfinder** - Vulnerability scanner
+   - Report: [flawfinder-report.txt](./flawfinder-report.txt) | [HTML](./flawfinder-report.html)
+
+6. **RATS** - Security vulnerability scanner  
+   - Report: [rats-report.txt](./rats-report.txt) | [HTML](./rats-report.html)
+
+7. **OCLint** - Code quality analysis
+   - Report: [oclint-report.html](./oclint-report.html)
+
+8. **Additional Checks**
+   - Unsafe functions: [unsafe-functions.txt](./unsafe-functions.txt)
+   - TODO/FIXME: [todo-fixme.txt](./todo-fixme.txt)
+
+## Quick Analysis Commands
+
+```bash
+# View text reports
+cat cppcheck-report.txt
+cat splint-report.txt
+cat flawfinder-report.txt
+cat cpd-report.txt
+
+# View HTML reports (open in browser)
+firefox flawfinder-report.html
+firefox rats-report.html  
+firefox oclint-report.html
+```
+
+## Important Files Analyzed
+
+- oauth2_server.c - Main server-side authentication logic
+- oauth2_client.c - Client-side authentication logic  
+- oauth2_config.c - Configuration management
+- oauth2_init.c - Plugin initialization
+- oauth2_plugin.h - Main header with definitions
+- oauth2_types.h - Type definitions
+
+## Next Steps
+
+1. Review all generated reports for security issues
+2. Prioritize fixes based on severity levels
+3. Focus on memory management and input validation
+4. Verify JWT token handling security
+5. Check OAuth2 flow implementation against RFCs
+SUMMARY_EOF
+
+echo "✅ Summary report generated"
+
+echo
+echo "🎉 Security analysis complete!"
+echo "📊 Reports generated in: $REPORTS_DIR"
+echo
+echo "📋 Quick overview of reports:"
+ls -la "$REPORTS_DIR"
+
+echo
+echo "🔍 To analyze results:"
+echo "  Text reports: cat $REPORTS_DIR/*.txt"
+echo "  HTML reports: open $REPORTS_DIR/*.html"
+echo "  XML reports: $REPORTS_DIR/*.xml"
+EOF
+
+RUN chmod +x /opt/security-analysis/scripts/analyze.sh
+
+# Create a quick analysis script (faster version)
+RUN cat > /opt/security-analysis/scripts/quick-analyze.sh << 'EOF'
+#!/bin/bash
+
+set -e
+
+PROJECT_DIR=${1:-"/workspace"}
+REPORTS_DIR="/opt/security-analysis/reports"
+
+if [ ! -d "$PROJECT_DIR" ]; then
+    echo "❌ Project directory $PROJECT_DIR not found"
+    exit 1
+fi
+
+cd "$PROJECT_DIR"
+mkdir -p "$REPORTS_DIR"
+
+echo "⚡ Quick security analysis for cyrus-sasl-oauth2-oidc"
+echo
+
+echo "1️⃣ Cppcheck (essential checks only)..."
+cppcheck --enable=warning,style --std=c11 -I/usr/local/include -I. *.c 2> "$REPORTS_DIR/quick-cppcheck.txt" || true
+
+echo "2️⃣ Splint (security focus)..." 
+splint +bounds +null +charint -I/usr/local/include -I. *.c > "$REPORTS_DIR/quick-splint.txt" 2>&1 || true
+
+echo "3️⃣ Flawfinder (vulnerabilities)..."
+flawfinder --minlevel=2 *.c > "$REPORTS_DIR/quick-flawfinder.txt" 2>&1 || true
+
+echo "4️⃣ CPD (duplications)..."
+if [ -f "/opt/pmd/bin/pmd" ]; then
+    /opt/pmd/bin/pmd cpd --minimum-tokens 30 --dir . --language cpp --format text > "$REPORTS_DIR/quick-cpd.txt" 2>&1 || true
+else
+    echo "PMD CPD not available" > "$REPORTS_DIR/quick-cpd.txt"
+fi
+
+echo
+echo "⚡ Quick analysis complete!"
+echo "📊 Reports: $REPORTS_DIR/quick-*.txt"
+EOF
+
+RUN chmod +x /opt/security-analysis/scripts/quick-analyze.sh
+
+# Set working directory
+WORKDIR /workspace
+
+# Create entrypoint
+RUN cat > /entrypoint.sh << 'EOF'
+#!/bin/bash
+
+if [ "$1" = "analyze" ]; then
+    exec /opt/security-analysis/scripts/analyze.sh /workspace
+elif [ "$1" = "quick" ]; then
+    exec /opt/security-analysis/scripts/quick-analyze.sh /workspace
+elif [ "$1" = "bash" ]; then
+    exec /bin/bash
+else
+    echo "Usage: docker run [OPTIONS] IMAGE COMMAND"
+    echo
+    echo "Commands:"
+    echo "  analyze  - Run comprehensive security analysis"
+    echo "  quick    - Run quick security analysis" 
+    echo "  bash     - Interactive shell"
+    echo
+    echo "Example:"
+    echo "  docker run -v \$(pwd):/workspace cyrus-sasl-oauth2-security analyze"
+fi
+EOF
+
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["analyze"]

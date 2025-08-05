@@ -1,0 +1,73 @@
+# Unit Tests Makefile for OAuth2 SASL Plugin
+CC = gcc
+CFLAGS = -Wall -Wextra -g -std=c99 -I../../ -I/usr/include/sasl -I/usr/include/oauth2
+LDFLAGS = -lsasl2 -loauth2 -ljansson -lcurl -lssl -lcrypto
+
+# Source files
+FRAMEWORK_SRCS = test_framework.c mock_sasl.c
+TEST_SRCS = test_config.c test_jwt.c test_plugin.c
+
+# Object files
+FRAMEWORK_OBJS = $(FRAMEWORK_SRCS:.c=.o)
+TEST_OBJS = $(TEST_SRCS:.c=.o)
+
+# Test executables
+TEST_BINS = test_config test_jwt test_plugin
+
+# Default target
+all: $(TEST_BINS)
+
+# Framework object
+test_framework.o: test_framework.c test_framework.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+mock_sasl.o: mock_sasl.c mock_sasl.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Test executables
+test_config: test_config.c test_framework.o mock_sasl.o
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+test_jwt: test_jwt.c test_framework.o mock_sasl.o
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+test_plugin: test_plugin.c test_framework.o mock_sasl.o
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+# Run all tests
+test: $(TEST_BINS)
+	@echo "Running all unit tests..."
+	@echo "========================"
+	@for test in $(TEST_BINS); do \
+		echo ""; \
+		echo "Running $$test:"; \
+		./$$test || exit 1; \
+	done
+	@echo ""
+	@echo "All unit tests passed!"
+
+# Run individual tests
+test-config: test_config
+	./test_config
+
+test-jwt: test_jwt
+	./test_jwt
+
+test-plugin: test_plugin
+	./test_plugin
+
+# Clean
+clean:
+	rm -f $(TEST_BINS) $(FRAMEWORK_OBJS) $(TEST_OBJS) *.o
+
+# Install test dependencies (Ubuntu/Debian)
+install-deps:
+	sudo apt-get update
+	sudo apt-get install -y \
+		libsasl2-dev \
+		liboauth2-dev \
+		libjansson-dev \
+		libcurl4-openssl-dev \
+		libssl-dev
+
+.PHONY: all test test-config test-jwt test-plugin clean install-deps

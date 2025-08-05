@@ -1,0 +1,42 @@
+Cyrus SASL OAuth2/OIDC Plugin News
+==================================
+
+August 2025 - Version 1.0.0 Released
+--------------------------------------
+
+We're excited to announce the first release of the Cyrus SASL OAuth2/OIDC Plugin,
+a comprehensive solution for OAuth2 and OpenID Connect authentication in SASL-enabled
+mail servers.
+
+Key Features:
+* Native liboauth2 integration for standards-compliant OAuth2/OIDC support
+* Dual mechanism support: XOAUTH2 and OAUTHBEARER
+* Automatic OIDC discovery with intelligent caching
+* Full JWT signature verification using JWKS
+* Multi-provider compatibility (tested with Authentik, Keycloak, Azure AD, Google)
+* Configurable caching backends for optimal performance
+* Security-focused design with proper token handling
+
+This plugin replaces custom fallback mechanisms with a robust, maintainable
+solution built on industry-standard libraries.
+
+Architecture Highlights:
+* Clean separation of configuration, caching, and authentication logic
+* Comprehensive error handling and logging
+* Memory-safe implementation with automatic token clearing
+* Flexible caching system supporting memory, file, and Redis backends
+* Extensive configuration options for production deployments
+
+Migration Benefits:
+Users migrating from SciTokens-based solutions will benefit from:
+* Simplified configuration (single discovery URL replaces multiple endpoints)
+* Enhanced security with mandatory signature verification
+* Better performance through intelligent caching
+* Broader provider compatibility without custom adaptations
+* Active maintenance through the liboauth2 ecosystem
+
+Getting Started:
+Visit our GitHub repository for complete installation instructions,
+configuration examples, and troubleshooting guides.
+
+We welcome feedback, bug reports, and contributions from the community!
