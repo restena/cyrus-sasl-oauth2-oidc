@@ -70,7 +70,7 @@ RUN dnf update -y && \
     dnf install -y \
     cyrus-sasl \
     liboauth2 \
-    libcjose \
+    cjose \
     jansson \
     libcurl \
     openssl-libs && \

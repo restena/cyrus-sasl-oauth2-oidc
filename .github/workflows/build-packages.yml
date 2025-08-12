@@ -14,12 +14,30 @@ jobs:
     strategy:
       matrix:
         include:
-          # Debian packages
-          - { os: debian, version: trixie, arch: amd64, dockerfile: Dockerfile.build }
-          - { os: debian, version: trixie, arch: arm64, dockerfile: Dockerfile.build }
-          # Fedora packages
-          - { os: fedora, version: "41", arch: x86_64, dockerfile: Dockerfile.fedora }
-          - { os: fedora, version: "41", arch: aarch64, dockerfile: Dockerfile.fedora }
+          - os: debian
+            version: trixie
+            arch: amd64
+            dockerfile: Dockerfile.build
+          - os: debian
+            version: trixie
+            arch: arm64
+            dockerfile: Dockerfile.build
+          - os: debian
+            version: bookworm
+            arch: amd64
+            dockerfile: Dockerfile.build
+          - os: debian
+            version: bookworm
+            arch: arm64
+            dockerfile: Dockerfile.build
+          - os: fedora
+            version: "41"
+            arch: x86_64
+            dockerfile: Dockerfile.fedora
+          - os: fedora
+            version: "41"
+            arch: aarch64
+            dockerfile: Dockerfile.fedora
     
     steps:
     - name: Checkout code

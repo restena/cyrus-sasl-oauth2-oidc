@@ -79,9 +79,9 @@ ls -la /usr/lib/*/sasl2/lib*oauth*.so
 
 This project supports building native packages for multiple Linux distributions.
 
-### Debian Package Build
+### Debian Package Build (Trixie/Bookworm)
 
-For Debian Trixie, you can build a native Debian package:
+For Debian Trixie and Bookworm, you can build a native Debian package:
 
 ```bash
 # Install build dependencies
@@ -148,15 +148,18 @@ For automated builds with proper isolation:
 
 ```bash
 # Build Debian packages
-./build-packages.sh debian trixie packages amd64    # AMD64
-./build-packages.sh debian trixie packages arm64    # ARM64
+./build-packages.sh debian trixie packages amd64     # Trixie AMD64
+./build-packages.sh debian trixie packages arm64     # Trixie ARM64
+./build-packages.sh debian bookworm packages amd64   # Bookworm AMD64
+./build-packages.sh debian bookworm packages arm64   # Bookworm ARM64
 
 # Build Fedora packages  
 ./build-packages.sh fedora 41 packages x86_64       # x86_64
 ./build-packages.sh fedora 41 packages aarch64      # ARM64
 
 # Test package installation
-./build-packages.sh debian trixie test amd64        # Test Debian
+./build-packages.sh debian trixie test amd64        # Test Debian Trixie
+./build-packages.sh debian bookworm test amd64      # Test Debian Bookworm
 ./build-packages.sh fedora 41 test x86_64           # Test Fedora
 ```
 

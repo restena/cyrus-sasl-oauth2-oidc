@@ -20,6 +20,11 @@ case $OS in
     debian)
         DOCKERFILE="Dockerfile.build"
         BUILD_ARG="DEBIAN_VERSION"
+        if [[ "$VERSION" != "trixie" && "$VERSION" != "bookworm" ]]; then
+            echo "Error: Only Debian Trixie and Bookworm are supported"
+            echo "Usage: $0 debian {trixie|bookworm} <target> <arch>"
+            exit 1
+        fi
         ;;
     fedora)
         DOCKERFILE="Dockerfile.fedora"
