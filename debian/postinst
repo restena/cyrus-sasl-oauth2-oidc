@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -e
+
+# Automatically added by dh_makeshlibs
+if [ "$1" = "configure" ]; then
+	ldconfig
+fi
+
+# Update SASL plugin database if saslpasswd2 is available
+if [ "$1" = "configure" ] && command -v saslpasswd2 >/dev/null 2>&1; then
+    # Refresh SASL plugin cache
+    if [ -x /usr/sbin/saslauthd ]; then
+        # Restart saslauthd if it's running to pick up new plugin
+        if systemctl is-active --quiet saslauthd 2>/dev/null; then
+            systemctl restart saslauthd || true
+        fi
+    fi
+fi
+
+#DEBHELPER#
+
+exit 0

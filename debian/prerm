@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+# Stop saslauthd if it's running before removing the plugin
+if [ "$1" = "remove" ] && command -v systemctl >/dev/null 2>&1; then
+    if systemctl is-active --quiet saslauthd 2>/dev/null; then
+        systemctl stop saslauthd || true
+    fi
+fi
+
+#DEBHELPER#
+
+exit 0

@@ -75,6 +75,32 @@ sudo make install
 ls -la /usr/lib/*/sasl2/lib*oauth*.so
 ```
 
+### Debian Package Build
+
+For Debian Trixie, you can build a native Debian package:
+
+```bash
+# Install build dependencies
+sudo apt-get install debhelper-compat autotools-dev autoconf automake libtool pkg-config
+sudo apt-get install libsasl2-dev liboauth2-dev libcjose-dev libjansson-dev
+sudo apt-get install libcurl4-openssl-dev libssl-dev
+
+# Build the package
+dpkg-buildpackage -us -uc -b
+
+# Install the generated package
+sudo dpkg -i ../cyrus-sasl-oauth2-oidc_1.0.0-1_amd64.deb
+
+# Fix any missing dependencies
+sudo apt-get install -f
+```
+
+The Debian package includes:
+- Proper integration with SASL plugin directory
+- Automatic library dependency resolution
+- Post-installation scripts for SASL daemon restart
+- Standard Debian package metadata and documentation
+
 ## Configuration
 
 ### ⚠️ **IMPORTANT: Configuration Format Differences**

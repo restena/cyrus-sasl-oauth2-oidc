@@ -1,0 +1,59 @@
+# Git files
+.git
+.gitignore
+
+# Build artifacts
+*.o
+*.lo
+*.la
+*.so
+*.deb
+*.changes
+*.buildinfo
+*.tar.gz
+*.tar.xz
+
+# Autotools generated files
+config.log
+config.status
+configure
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+config.h
+config.h.in
+stamp-h1
+libtool
+.deps/
+.libs/
+
+# Debian build artifacts
+debian/files
+debian/debhelper-build-stamp
+debian/cyrus-sasl-oauth2-oidc/
+debian/.debhelper/
+debian/cyrus-sasl-oauth2-oidc.substvars
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Documentation
+*.md
+!README.md
+
+# Test files
+tests/
+sec/
+
+# CI/CD files (keep only what's needed)
+.github/
+!.github/workflows/
+
+# Temporary files
+tmp/
+temp/

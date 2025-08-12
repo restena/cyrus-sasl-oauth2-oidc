@@ -1,0 +1,11 @@
+cyrus-sasl-oauth2-oidc (1.0.0-1) trixie; urgency=medium
+
+  * Initial Debian package release
+  * OAuth2/OIDC SASL plugin for Cyrus SASL
+  * Support for Bearer token authentication
+  * OpenID Connect ID token validation
+  * JWT token introspection capabilities
+  * Multiple issuer and audience support
+  * Compatible with Debian Trixie
+
+ -- Stephane Benoit <stefb@wizzz.net>  Mon, 12 Aug 2025 19:16:46 +0200

@@ -1,0 +1,45 @@
+Source: cyrus-sasl-oauth2-oidc
+Section: libs
+Priority: optional
+Maintainer: Stephane Benoit <stefb@wizzz.net>
+Build-Depends: debhelper-compat (= 13),
+               autotools-dev,
+               autoconf,
+               automake,
+               libtool,
+               pkg-config,
+               libsasl2-dev,
+               liboauth2-dev,
+               libcjose-dev,
+               libjansson-dev,
+               libcurl4-openssl-dev,
+               libssl-dev
+Standards-Version: 4.6.2
+Homepage: https://github.com/stefb/cyrus-sasl-oauth2-oidc
+Vcs-Git: https://github.com/stefb/cyrus-sasl-oauth2-oidc.git
+Vcs-Browser: https://github.com/stefb/cyrus-sasl-oauth2-oidc
+
+Package: cyrus-sasl-oauth2-oidc
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+         libsasl2-2,
+         libcjose0,
+         libjansson4,
+         liboauth2-0,
+         libcurl4,
+         libsph4,
+         libssl3
+Description: OAuth2/OIDC SASL plugin for Cyrus SASL
+ This package provides an OAuth2/OIDC authentication mechanism plugin
+ for Cyrus SASL. It allows applications using SASL to authenticate
+ users via OAuth2/OpenID Connect providers.
+ .
+ The plugin supports:
+  - OAuth2 Bearer token authentication
+  - OpenID Connect ID token validation
+  - JWT token introspection
+  - Multiple issuer support
+  - Configurable audience validation
+ .
+ This is particularly useful for modern email servers like Cyrus IMAP
+ that need to integrate with OAuth2 identity providers.

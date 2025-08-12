@@ -172,6 +172,20 @@ else
     CFLAGS="$CFLAGS -O2 -DNDEBUG"
 fi
 
+# Tests build support
+AC_ARG_ENABLE([tests],
+    [AS_HELP_STRING([--disable-tests], [Disable building tests])],
+    [build_tests="$enableval"],
+    [build_tests="yes"])
+
+AM_CONDITIONAL([BUILD_TESTS], [test "x$build_tests" = "xyes"])
+
+if test "x$build_tests" = "xyes"; then
+    AC_MSG_NOTICE([Tests will be built])
+else
+    AC_MSG_NOTICE([Tests disabled])
+fi
+
 # Feature flags
 AC_DEFINE([OAUTH2_PLUGIN_VERSION], ["1.0.0"], [Plugin version])
 AC_DEFINE([HAVE_LIBOAUTH2], [1], [Define if you have liboauth2])

@@ -1,0 +1,91 @@
+# Multi-stage Dockerfile for building Debian packages
+# Stage 1: Build environment
+FROM debian:trixie-slim AS builder
+
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV DEB_BUILD_OPTIONS="parallel=4"
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    # Core build tools
+    build-essential \
+    debhelper-compat \
+    devscripts \
+    fakeroot \
+    lintian \
+    # Autotools
+    autotools-dev \
+    autoconf \
+    automake \
+    libtool \
+    pkg-config \
+    # Library dependencies
+    libsasl2-dev \
+    liboauth2-dev \
+    libcjose-dev \
+    libjansson-dev \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    # Additional utilities
+    git \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /build
+
+# Copy source code
+COPY . .
+
+# Generate autotools files if needed
+RUN if [ -f autogen.sh ]; then ./autogen.sh; fi
+
+# Build the Debian package
+RUN dpkg-buildpackage -us -uc -b
+
+# Stage 2: Package collection
+FROM debian:trixie-slim AS packages
+
+# Copy built packages from builder stage
+COPY --from=builder /cyrus-sasl-oauth2-oidc_*.deb /packages/
+COPY --from=builder /cyrus-sasl-oauth2-oidc_*.changes /packages/
+COPY --from=builder /cyrus-sasl-oauth2-oidc_*.buildinfo /packages/
+
+# Install lintian for package validation
+RUN apt-get update && apt-get install -y lintian && rm -rf /var/lib/apt/lists/*
+
+# Validate packages
+RUN cd /packages && \
+    for deb in *.deb; do \
+        echo "Validating $deb..."; \
+        lintian --no-tag-display-limit "$deb" || true; \
+    done
+
+# Set default command to list packages
+CMD ["ls", "-la", "/packages/"]
+
+# Stage 3: Runtime test environment (optional)
+FROM debian:trixie-slim AS test
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    libsasl2-2 \
+    liboauth2-0 \
+    libcjose0 \
+    libjansson4 \
+    libcurl4 \
+    libssl3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy and install the package
+COPY --from=builder /cyrus-sasl-oauth2-oidc_*.deb /tmp/
+
+# Install the package
+RUN dpkg -i /tmp/cyrus-sasl-oauth2-oidc_*.deb || apt-get install -f -y
+
+# Verify installation
+RUN ls -la /usr/lib/*/sasl2/liboauth2.so && \
+    echo "Package installed successfully!"
+
+CMD ["/bin/bash"]

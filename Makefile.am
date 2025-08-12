@@ -39,7 +39,8 @@ liboauth2_la_LIBADD = \
     -lssl \
     -lcrypto
 
-# Unit tests
+# Unit tests (conditional on BUILD_TESTS)
+if BUILD_TESTS
 check_PROGRAMS = \
     tests/unit/test_config \
     tests/unit/test_jwt \
@@ -48,8 +49,10 @@ check_PROGRAMS = \
 # Integration tests - use noinst_PROGRAMS for programs not installed
 noinst_PROGRAMS = \
     tests/integration/integration_test
+endif
 
-# Test sources and flags
+# Test sources and flags (conditional on BUILD_TESTS)
+if BUILD_TESTS
 tests_unit_test_config_SOURCES = \
     tests/unit/test_config.c \
     tests/unit/test_framework.c \
@@ -79,8 +82,10 @@ tests_integration_integration_test_SOURCES = \
     tests/integration/test_utils.c
 tests_integration_integration_test_CPPFLAGS = $(liboauth2_la_CPPFLAGS) -I$(srcdir) -I$(srcdir)/tests/integration
 tests_integration_integration_test_LDADD = liboauth2.la -lsasl2
+endif
 
-# Run tests after build
+# Run tests after build (conditional on BUILD_TESTS)
+if BUILD_TESTS
 check-local:
 	@echo "Running OAuth2 SASL Plugin Unit Tests..."
 	@echo "======================================="
@@ -91,7 +96,6 @@ check-local:
 	@echo "All unit tests passed!"
 
 # Integration test targets
-.PHONY: integration check-integration test-integration
 integration: $(noinst_PROGRAMS)
 
 check-integration: integration
@@ -104,6 +108,7 @@ check-integration: integration
 	@echo "All integration tests passed!"
 
 test-integration: check-integration
+endif
 
 # Additional files to distribute
 EXTRA_DIST = \
@@ -171,8 +176,6 @@ maintainer-clean-local:
 	-rm -f Makefile.in
 
 # Development targets
-.PHONY: debug install-debug uninstall-debug
-
 debug: CFLAGS := $(CFLAGS) -g -O0 -DDEBUG -Wall -Wextra -Wpedantic
 debug: all
 
@@ -180,9 +183,10 @@ install-debug: debug install
 
 uninstall-debug: uninstall
 
-# Testing targets (placeholder for future implementation)
-.PHONY: check-syntax test
+# All PHONY targets (consolidated to avoid duplicates)
+.PHONY: debug install-debug uninstall-debug check-syntax test help integration check-integration test-integration
 
+# Testing targets (placeholder for future implementation)
 check-syntax:
 	@echo "Checking syntax..."
 	@for file in $(liboauth2_la_SOURCES); do \
@@ -197,8 +201,6 @@ test: check check-integration
 	@echo "All tests completed successfully!"
 
 # Help target
-.PHONY: help
-
 help:
 	@echo "Available targets:"
 	@echo "  all                 - Build the plugin"
