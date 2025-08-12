@@ -27,7 +27,6 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
          libjansson4,
          liboauth2-0,
          libcurl4,
-         libsph4,
          libssl3
 Description: OAuth2/OIDC SASL plugin for Cyrus SASL
  This package provides an OAuth2/OIDC authentication mechanism plugin
