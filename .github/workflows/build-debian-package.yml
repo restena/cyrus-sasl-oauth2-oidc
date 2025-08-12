@@ -82,7 +82,7 @@ jobs:
     - name: Upload packages as artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: debian-packages-${{ matrix.debian_version }}-${{ matrix.arch }}
+        name: debian-packages-${{ matrix.debian_version }}-${{ matrix.arch }}-${{ github.run_number }}
         path: packages/
         retention-days: 30
 
