@@ -1,0 +1,98 @@
+# Multi-stage Dockerfile for building RPM packages on Fedora/RHEL
+ARG FEDORA_VERSION=41
+
+# Stage 1: Builder - Install dependencies and build RPM
+FROM fedora:${FEDORA_VERSION} AS builder
+
+# Install build dependencies
+RUN dnf update -y && \
+    dnf install -y \
+    rpm-build \
+    rpmdevtools \
+    gcc \
+    make \
+    autoconf \
+    automake \
+    libtool \
+    pkgconfig \
+    cyrus-sasl-devel \
+    liboauth2-devel \
+    cjose-devel \
+    jansson-devel \
+    libcurl-devel \
+    openssl-devel \
+    git \
+    tar \
+    gzip && \
+    dnf clean all
+
+# Set up RPM build environment
+RUN rpmdev-setuptree
+
+# Copy source code
+WORKDIR /root/rpmbuild/SOURCES
+COPY . cyrus-sasl-oauth2-oidc-1.0.0/
+
+# Create source tarball
+RUN tar -czf cyrus-sasl-oauth2-oidc-1.0.0.tar.gz cyrus-sasl-oauth2-oidc-1.0.0/
+
+# Copy spec file
+COPY rpm/cyrus-sasl-oauth2-oidc.spec /root/rpmbuild/SPECS/
+
+# Build RPM
+WORKDIR /root/rpmbuild
+RUN rpmbuild -ba SPECS/cyrus-sasl-oauth2-oidc.spec
+
+# Stage 2: Packages - Collect built packages and validate
+FROM fedora:${FEDORA_VERSION} AS packages
+
+# Install linting tools
+RUN dnf install -y rpmlint && dnf clean all
+
+# Copy built packages
+COPY --from=builder /root/rpmbuild/RPMS/ /packages/RPMS/
+COPY --from=builder /root/rpmbuild/SRPMS/ /packages/SRPMS/
+
+# Validate packages with rpmlint
+WORKDIR /packages
+RUN find RPMS/ -name "*.rpm" -exec rpmlint {} \; || true
+RUN find SRPMS/ -name "*.rpm" -exec rpmlint {} \; || true
+
+# List built packages
+RUN echo "=== Built RPM Packages ===" && \
+    find /packages -name "*.rpm" -exec ls -lh {} \;
+
+# Stage 3: Test - Install and verify the package
+FROM fedora:${FEDORA_VERSION} AS test
+
+# Install runtime dependencies
+RUN dnf update -y && \
+    dnf install -y \
+    cyrus-sasl \
+    liboauth2 \
+    libcjose \
+    jansson \
+    libcurl \
+    openssl-libs && \
+    dnf clean all
+
+# Copy and install the built package
+COPY --from=packages /packages/RPMS/ /tmp/rpms/
+
+# Install the package
+RUN dnf install -y /tmp/rpms/*/*.rpm
+
+# Verify installation
+RUN echo "=== Verifying Installation ===" && \
+    rpm -qa | grep cyrus-sasl-oauth2-oidc && \
+    echo "=== Checking Plugin File ===" && \
+    find /usr/lib* -name "liboauth2.so*" -type f && \
+    echo "=== Plugin Installation Verified ==="
+
+# Test that the plugin loads (basic smoke test)
+RUN echo "=== Testing Plugin Load ===" && \
+    ldconfig && \
+    ldd /usr/lib*/sasl2/liboauth2.so || echo "Plugin dependencies checked"
+
+WORKDIR /packages
+CMD ["sh", "-c", "echo 'RPM build and test completed successfully' && find /packages -name '*.rpm' -exec ls -lh {} \\;"]

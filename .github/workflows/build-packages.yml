@@ -1,0 +1,135 @@
+name: Build Packages (DEB & RPM)
+
+on:
+  push:
+    branches: [ main, develop ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-packages:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          # Debian packages
+          - { os: debian, version: trixie, arch: amd64, dockerfile: Dockerfile.build }
+          - { os: debian, version: trixie, arch: arm64, dockerfile: Dockerfile.build }
+          # Fedora packages
+          - { os: fedora, version: "41", arch: x86_64, dockerfile: Dockerfile.fedora }
+          - { os: fedora, version: "41", arch: aarch64, dockerfile: Dockerfile.fedora }
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Create packages directory
+      run: mkdir -p packages
+
+    - name: Build packages (Debian)
+      if: matrix.os == 'debian'
+      run: |
+        docker buildx build \
+          --platform linux/${{ matrix.arch }} \
+          --target packages \
+          --tag cyrus-sasl-oauth2-oidc-packages:${{ matrix.version }}-${{ matrix.arch }} \
+          --file ${{ matrix.dockerfile }} \
+          --build-arg DEBIAN_VERSION=${{ matrix.version }} \
+          --load \
+          .
+        
+        # Extract packages
+        docker run --rm -v $(pwd)/packages:/output \
+          cyrus-sasl-oauth2-oidc-packages:${{ matrix.version }}-${{ matrix.arch }} \
+          sh -c "cp -r /packages/* /output/"
+
+    - name: Build packages (Fedora)
+      if: matrix.os == 'fedora'
+      run: |
+        # Map architecture names for RPM
+        RPM_ARCH=${{ matrix.arch }}
+        if [ "$RPM_ARCH" = "aarch64" ]; then
+          DOCKER_ARCH="arm64"
+        else
+          DOCKER_ARCH="amd64"
+        fi
+        
+        docker buildx build \
+          --platform linux/${DOCKER_ARCH} \
+          --target packages \
+          --tag cyrus-sasl-oauth2-oidc-packages:${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }} \
+          --file ${{ matrix.dockerfile }} \
+          --build-arg FEDORA_VERSION=${{ matrix.version }} \
+          --load \
+          .
+        
+        # Extract packages
+        docker run --rm -v $(pwd)/packages:/output \
+          cyrus-sasl-oauth2-oidc-packages:${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }} \
+          sh -c "cp -r /packages/* /output/"
+
+    - name: Test package installation (Debian)
+      if: matrix.os == 'debian'
+      run: |
+        docker buildx build \
+          --platform linux/${{ matrix.arch }} \
+          --target test \
+          --tag cyrus-sasl-oauth2-oidc-test:${{ matrix.version }}-${{ matrix.arch }} \
+          --file ${{ matrix.dockerfile }} \
+          --build-arg DEBIAN_VERSION=${{ matrix.version }} \
+          --load \
+          .
+        
+        # Verify the plugin is properly installed
+        docker run --rm cyrus-sasl-oauth2-oidc-test:${{ matrix.version }}-${{ matrix.arch }} \
+          bash -c "ls -la /usr/lib/*/sasl2/liboauth2.so"
+
+    - name: Test package installation (Fedora)
+      if: matrix.os == 'fedora'
+      run: |
+        # Map architecture names for Docker
+        RPM_ARCH=${{ matrix.arch }}
+        if [ "$RPM_ARCH" = "aarch64" ]; then
+          DOCKER_ARCH="arm64"
+        else
+          DOCKER_ARCH="amd64"
+        fi
+        
+        docker buildx build \
+          --platform linux/${DOCKER_ARCH} \
+          --target test \
+          --tag cyrus-sasl-oauth2-oidc-test:${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }} \
+          --file ${{ matrix.dockerfile }} \
+          --build-arg FEDORA_VERSION=${{ matrix.version }} \
+          --load \
+          .
+        
+        # Verify the plugin is properly installed
+        docker run --rm cyrus-sasl-oauth2-oidc-test:${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }} \
+          bash -c "find /usr/lib* -name 'liboauth2.so*' -type f"
+
+    - name: Upload packages as artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: packages-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}-${{ github.run_number }}
+        path: packages/
+        retention-days: 30
+
+    - name: Create release assets (on tag)
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: packages/*
+        draft: false
+        prerelease: false
+        generate_release_notes: true

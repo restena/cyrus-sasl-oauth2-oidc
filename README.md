@@ -75,6 +75,10 @@ sudo make install
 ls -la /usr/lib/*/sasl2/lib*oauth*.so
 ```
 
+## Package Builds
+
+This project supports building native packages for multiple Linux distributions.
+
 ### Debian Package Build
 
 For Debian Trixie, you can build a native Debian package:
@@ -100,6 +104,63 @@ The Debian package includes:
 - Automatic library dependency resolution
 - Post-installation scripts for SASL daemon restart
 - Standard Debian package metadata and documentation
+
+### RPM Package Build (Fedora)
+
+For Fedora distributions:
+
+```bash
+# Fedora - Install build dependencies
+sudo dnf install rpm-build rpmdevtools gcc make autoconf automake libtool pkgconfig
+sudo dnf install cyrus-sasl-devel liboauth2-devel libcjose-devel jansson-devel
+sudo dnf install libcurl-devel openssl-devel
+
+# Note: RHEL/CentOS/Rocky/Alma Linux are not currently supported
+# due to missing dependencies (liboauth2-devel, cjose-devel) in EPEL repositories
+
+# Set up RPM build environment
+rpmdev-setuptree
+
+# Create source tarball
+tar -czf ~/rpmbuild/SOURCES/cyrus-sasl-oauth2-oidc-1.0.0.tar.gz .
+
+# Copy spec file
+cp rpm/cyrus-sasl-oauth2-oidc.spec ~/rpmbuild/SPECS/
+
+# Build RPM
+rpmbuild -ba ~/rpmbuild/SPECS/cyrus-sasl-oauth2-oidc.spec
+
+# Install the generated package
+sudo dnf install ~/rpmbuild/RPMS/x86_64/cyrus-sasl-oauth2-oidc-1.0.0-1.*.x86_64.rpm
+```
+
+The RPM package includes:
+- Integration with standard SASL plugin directory (`/usr/lib*/sasl2/`)
+- Automatic dependency resolution via RPM
+- Post-installation scripts for ldconfig and service restart
+- Compatible with Fedora 41+
+
+**Note**: RHEL/CentOS/Rocky/Alma Linux are not currently supported due to missing OAuth2 dependencies in EPEL repositories.
+
+### Docker-based Package Building
+
+For automated builds with proper isolation:
+
+```bash
+# Build Debian packages
+./build-packages.sh debian trixie packages amd64    # AMD64
+./build-packages.sh debian trixie packages arm64    # ARM64
+
+# Build Fedora packages  
+./build-packages.sh fedora 41 packages x86_64       # x86_64
+./build-packages.sh fedora 41 packages aarch64      # ARM64
+
+# Test package installation
+./build-packages.sh debian trixie test amd64        # Test Debian
+./build-packages.sh fedora 41 test x86_64           # Test Fedora
+```
+
+Built packages will be available in the `packages/` directory.
 
 ## Configuration
 
