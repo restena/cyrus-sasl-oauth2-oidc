@@ -1,6 +1,7 @@
 # Multi-stage Dockerfile for building Debian packages
+ARG DEBIAN_VERSION=trixie
 # Stage 1: Build environment
-FROM debian:trixie-slim AS builder
+FROM debian:${DEBIAN_VERSION}-slim AS builder
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
@@ -45,7 +46,7 @@ RUN if [ -f autogen.sh ]; then ./autogen.sh; fi
 RUN dpkg-buildpackage -us -uc -b
 
 # Stage 2: Package collection
-FROM debian:trixie-slim AS packages
+FROM debian:${DEBIAN_VERSION}-slim AS packages
 
 # Copy built packages from builder stage
 COPY --from=builder /cyrus-sasl-oauth2-oidc_*.deb /dist/packages/
@@ -66,7 +67,7 @@ RUN cd /dist/packages && \
 CMD ["ls", "-la", "/dist/packages/"]
 
 # Stage 3: Runtime test environment (optional)
-FROM debian:trixie-slim AS test
+FROM debian:${DEBIAN_VERSION}-slim AS test
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y \
