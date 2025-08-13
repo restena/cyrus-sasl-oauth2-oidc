@@ -75,6 +75,20 @@ sudo make install
 ls -la /usr/lib/*/sasl2/lib*oauth*.so
 ```
 
+## Supported Distributions
+
+| Distribution | Version | Architecture | liboauth2 Version | Status |
+|-------------|---------|--------------|-------------------|---------|
+| Debian | Trixie (13) | AMD64, ARM64 | 2.x | ✅ Supported |
+| Debian | Bookworm (12) | AMD64, ARM64 | 1.6.x | ✅ Supported |
+| Ubuntu | 24.04 LTS (Noble) | AMD64, ARM64 | 1.6.0 | ✅ Supported |
+| Ubuntu | 22.04 LTS (Jammy) | AMD64, ARM64 | N/A | ❌ No liboauth2 Package* |
+| Fedora | 41+ | x86_64, aarch64 | 2.x | ✅ Supported |
+| RHEL | 9 + EPEL | x86_64 | N/A | ❌ Not Compatible** |
+
+*Ubuntu 22.04 LTS requires manual compilation of liboauth2 from source  
+**RHEL 9 + EPEL lacks required dependencies (cjose, compatible liboauth2)
+
 ## Package Builds
 
 This project supports building native packages for multiple Linux distributions.
@@ -104,6 +118,34 @@ The Debian package includes:
 - Automatic library dependency resolution
 - Post-installation scripts for SASL daemon restart
 - Standard Debian package metadata and documentation
+
+### Ubuntu Package Build (24.04 LTS)
+
+For Ubuntu 24.04 LTS (Noble):
+
+```bash
+# Install build dependencies
+sudo apt update
+sudo apt install build-essential debhelper devscripts fakeroot lintian
+sudo apt install pkg-config libtool autoconf automake autotools-dev
+sudo apt install libsasl2-dev liboauth2-dev libcjose-dev libjansson-dev
+sudo apt install libcurl4-openssl-dev libssl-dev
+
+# Build the package
+dpkg-buildpackage -us -uc -b
+
+# Install the package
+sudo dpkg -i ../cyrus-sasl-oauth2-oidc_1.0.0-1_amd64.deb
+sudo apt-get install -f  # Fix dependencies if needed
+```
+
+The Ubuntu package includes:
+- Integration with standard SASL plugin directory (`/usr/lib/*/sasl2/`)
+- Automatic dependency resolution via APT
+- Post-installation scripts for SASL daemon restart
+- Compatible with Ubuntu 24.04 LTS (Noble) with liboauth2 1.6.0
+
+**Note**: Ubuntu 22.04 LTS (Jammy) is not supported due to missing liboauth2 packages in official repositories.
 
 ### RPM Package Build (Fedora)
 
@@ -152,6 +194,10 @@ For automated builds with proper isolation:
 ./build-packages.sh debian trixie packages arm64     # Trixie ARM64
 ./build-packages.sh debian bookworm packages amd64   # Bookworm AMD64
 ./build-packages.sh debian bookworm packages arm64   # Bookworm ARM64
+
+# Build Ubuntu packages
+./build-packages.sh ubuntu 24.04 packages amd64      # Ubuntu 24.04 LTS AMD64
+./build-packages.sh ubuntu 24.04 packages arm64      # Ubuntu 24.04 LTS ARM64
 
 # Build Fedora packages  
 ./build-packages.sh fedora 41 packages x86_64       # x86_64

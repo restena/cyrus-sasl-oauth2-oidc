@@ -33,6 +33,14 @@ jobs:
             version: bookworm
             arch: arm64
             dockerfile: Dockerfile.build
+          - os: ubuntu
+            version: "24.04"
+            arch: amd64
+            dockerfile: Dockerfile.ubuntu
+          - os: ubuntu
+            version: "24.04"
+            arch: arm64
+            dockerfile: Dockerfile.ubuntu
           - os: fedora
             version: "41"
             arch: x86_64
@@ -74,6 +82,52 @@ jobs:
         docker run --rm -v $(pwd)/dist/packages:/output \
           cyrus-sasl-oauth2-oidc-packages:${{ matrix.version }}-${{ matrix.arch }} \
           sh -c "cp -r /dist/packages/* /output/"
+        
+        # Rename Debian packages to include distribution version
+        if [ -d "dist/packages" ]; then
+          for deb in dist/packages/*.deb; do
+            if [ -f "$deb" ]; then
+              # Extract filename without extension
+              basename=$(basename "$deb" .deb)
+              # Add distribution version to filename
+              new_name="${basename}-${{ matrix.version }}.deb"
+              mv "$deb" "dist/packages/$new_name"
+              echo "Renamed: $deb -> dist/packages/$new_name"
+            fi
+          done
+        fi
+
+    - name: Build packages (Ubuntu)
+      if: matrix.os == 'ubuntu'
+      run: |
+        docker buildx build \
+          --platform linux/${{ matrix.arch }} \
+          --target packages \
+          --tag cyrus-sasl-oauth2-oidc-packages:${{ matrix.version }}-${{ matrix.arch }} \
+          --file ${{ matrix.dockerfile }} \
+          --build-arg UBUNTU_VERSION=${{ matrix.version }} \
+          --load \
+          .
+        
+        # Extract packages
+        mkdir -p dist/packages
+        docker run --rm -v $(pwd)/dist/packages:/output \
+          cyrus-sasl-oauth2-oidc-packages:${{ matrix.version }}-${{ matrix.arch }} \
+          sh -c "cp -r /dist/packages/* /output/"
+        
+        # Rename Ubuntu packages to include distribution version
+        if [ -d "dist/packages" ]; then
+          for deb in dist/packages/*.deb; do
+            if [ -f "$deb" ]; then
+              # Extract filename without extension
+              basename=$(basename "$deb" .deb)
+              # Add distribution version to filename
+              new_name="${basename}-ubuntu${{ matrix.version }}.deb"
+              mv "$deb" "dist/packages/$new_name"
+              echo "Renamed: $deb -> dist/packages/$new_name"
+            fi
+          done
+        fi
 
     - name: Build packages (Fedora)
       if: matrix.os == 'fedora'
@@ -117,6 +171,22 @@ jobs:
         docker run --rm cyrus-sasl-oauth2-oidc-test:${{ matrix.version }}-${{ matrix.arch }} \
           bash -c "ls -la /usr/lib/*/sasl2/liboauth2.so"
 
+    - name: Test package installation (Ubuntu)
+      if: matrix.os == 'ubuntu'
+      run: |
+        docker buildx build \
+          --platform linux/${{ matrix.arch }} \
+          --target test \
+          --tag cyrus-sasl-oauth2-oidc-test:${{ matrix.version }}-${{ matrix.arch }} \
+          --file ${{ matrix.dockerfile }} \
+          --build-arg UBUNTU_VERSION=${{ matrix.version }} \
+          --load \
+          .
+        
+        # Verify the plugin is properly installed
+        docker run --rm cyrus-sasl-oauth2-oidc-test:${{ matrix.version }}-${{ matrix.arch }} \
+          bash -c "ls -la /usr/lib/*/sasl2/liboauth2.so"
+
     - name: Test package installation (Fedora)
       if: matrix.os == 'fedora'
       run: |
@@ -152,7 +222,9 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/v')
       uses: softprops/action-gh-release@v1
       with:
-        files: dist/packages/**/*
+        files: |
+          dist/packages/**/*.deb
+          dist/packages/**/*.rpm
         draft: false
         prerelease: false
         generate_release_notes: true

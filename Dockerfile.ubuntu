@@ -1,0 +1,82 @@
+# Multi-stage Dockerfile for Ubuntu package builds
+ARG UBUNTU_VERSION=24.04
+FROM ubuntu:${UBUNTU_VERSION} AS builder
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    debhelper \
+    devscripts \
+    fakeroot \
+    lintian \
+    pkg-config \
+    libtool \
+    autoconf \
+    automake \
+    autotools-dev \
+    libsasl2-dev \
+    liboauth2-dev \
+    libcjose-dev \
+    libjansson-dev \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /build
+
+# Copy source code
+COPY . .
+
+# Generate autotools files if needed
+RUN if [ -f autogen.sh ]; then ./autogen.sh; fi
+
+# Build the Ubuntu package
+RUN dpkg-buildpackage -us -uc -b
+
+# Stage 2: Package collection and validation
+FROM ubuntu:${UBUNTU_VERSION} AS packages
+
+# Copy built packages from builder stage
+COPY --from=builder /cyrus-sasl-oauth2-oidc_*.deb /dist/packages/
+COPY --from=builder /cyrus-sasl-oauth2-oidc_*.changes /dist/packages/
+COPY --from=builder /cyrus-sasl-oauth2-oidc_*.buildinfo /dist/packages/
+
+# Install lintian for package validation
+RUN apt-get update && apt-get install -y lintian && rm -rf /var/lib/apt/lists/*
+
+# Validate packages
+RUN cd /dist/packages && \
+    for deb in *.deb; do \
+        echo "Validating $deb..."; \
+        lintian --no-tag-display-limit "$deb" || true; \
+    done
+
+# Set default command to list packages
+CMD ["ls", "-la", "/dist/packages/"]
+
+# Stage 3: Runtime test environment (optional)
+FROM ubuntu:${UBUNTU_VERSION} AS test
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    libsasl2-2 \
+    liboauth2-0 \
+    libcjose0 \
+    libjansson4 \
+    libcurl4 \
+    openssl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy and install the package
+COPY --from=builder /cyrus-sasl-oauth2-oidc_*.deb /tmp/
+
+# Install the package
+RUN dpkg -i /tmp/cyrus-sasl-oauth2-oidc_*.deb || apt-get install -f -y
+
+# Verify installation
+RUN ls -la /usr/lib/*/sasl2/liboauth2.so && \
+    echo "Package installed successfully!"
+
+CMD ["/bin/bash"]

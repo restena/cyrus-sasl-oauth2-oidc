@@ -26,12 +26,26 @@ case $OS in
             exit 1
         fi
         ;;
+    ubuntu)
+        DOCKERFILE="Dockerfile.ubuntu"
+        BUILD_ARG="UBUNTU_VERSION"
+        if [[ "$VERSION" != "24.04" ]]; then
+            echo "Error: Only Ubuntu 24.04 LTS is supported"
+            echo "Usage: $0 ubuntu 24.04 <target> <arch>"
+            exit 1
+        fi
+        ;;
     fedora)
         DOCKERFILE="Dockerfile.fedora"
         BUILD_ARG="FEDORA_VERSION"
+        if [[ "$VERSION" != "41" ]]; then
+            echo "Error: Only Fedora 41 is supported"
+            echo "Usage: $0 fedora 41 <target> <arch>"
+            exit 1
+        fi
         ;;
     *)
-        echo "❌ Error: Unsupported OS '$OS'. Supported: debian, fedora"
+        echo "❌ Error: Unsupported OS '$OS'. Supported: debian, ubuntu, fedora"
         exit 1
         ;;
 esac
