@@ -303,7 +303,7 @@ static int oauth2_validate_jwt_token(const sasl_utils_t *utils,
             return SASL_NOMEM;
         }
         
-        strncpy(padded_payload, payload, payload_len);
+        memcpy(padded_payload, payload, payload_len);
         padded_payload[payload_len] = '\0';
         for (size_t i = 0; i < padding; i++) {
             padded_payload[payload_len + i] = '=';
@@ -471,7 +471,7 @@ static int oauth2_validate_jwt_token(const sasl_utils_t *utils,
         if (verify) oauth2_cfg_token_verify_free(config->oauth2_log, verify);
         return SASL_NOMEM;
     }
-    strncpy(*username, user_value, user_len);
+    memcpy(*username, user_value, user_len);
     (*username)[user_len] = '\0';
     
     /* Clean up */
@@ -571,7 +571,7 @@ int oauth2_server_step(void *conn_context, sasl_server_params_t *params,
     size_t username_len = strlen(final_username);
     context->username = utils->malloc(username_len + 1);
     if (context->username) {
-        strncpy(context->username, final_username, username_len);
+        memcpy(context->username, final_username, username_len);
         context->username[username_len] = '\0';
     }
     context->access_token = token;
