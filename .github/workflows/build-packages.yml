@@ -11,6 +11,9 @@ on:
 jobs:
   build-packages:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     strategy:
       matrix:
         include:
