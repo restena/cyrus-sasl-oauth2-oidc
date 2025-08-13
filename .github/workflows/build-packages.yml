@@ -67,9 +67,10 @@ jobs:
           .
         
         # Extract packages
-        docker run --rm -v $(pwd)/packages:/output \
+        mkdir -p dist/packages
+        docker run --rm -v $(pwd)/dist/packages:/output \
           cyrus-sasl-oauth2-oidc-packages:${{ matrix.version }}-${{ matrix.arch }} \
-          sh -c "cp -r /packages/* /output/"
+          sh -c "cp -r /dist/packages/* /output/"
 
     - name: Build packages (Fedora)
       if: matrix.os == 'fedora'
@@ -92,9 +93,10 @@ jobs:
           .
         
         # Extract packages
-        docker run --rm -v $(pwd)/packages:/output \
+        mkdir -p dist/packages
+        docker run --rm -v $(pwd)/dist/packages:/output \
           cyrus-sasl-oauth2-oidc-packages:${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }} \
-          sh -c "cp -r /packages/* /output/"
+          sh -c "cp -r /dist/packages/* /output/"
 
     - name: Test package installation (Debian)
       if: matrix.os == 'debian'
@@ -140,14 +142,14 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: packages-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}-${{ github.run_number }}
-        path: packages/
+        path: dist/packages/
         retention-days: 30
 
     - name: Create release assets (on tag)
       if: startsWith(github.ref, 'refs/tags/v')
       uses: softprops/action-gh-release@v1
       with:
-        files: packages/*
+        files: dist/packages/**/*
         draft: false
         prerelease: false
         generate_release_notes: true

@@ -50,17 +50,17 @@ FROM fedora:${FEDORA_VERSION} AS packages
 RUN dnf install -y rpmlint && dnf clean all
 
 # Copy built packages
-COPY --from=builder /root/rpmbuild/RPMS/ /packages/RPMS/
-COPY --from=builder /root/rpmbuild/SRPMS/ /packages/SRPMS/
+COPY --from=builder /root/rpmbuild/RPMS/ /dist/packages/RPMS/
+COPY --from=builder /root/rpmbuild/SRPMS/ /dist/packages/SRPMS/
 
 # Validate packages with rpmlint
-WORKDIR /packages
+WORKDIR /dist/packages
 RUN find RPMS/ -name "*.rpm" -exec rpmlint {} \; || true
 RUN find SRPMS/ -name "*.rpm" -exec rpmlint {} \; || true
 
 # List built packages
 RUN echo "=== Built RPM Packages ===" && \
-    find /packages -name "*.rpm" -exec ls -lh {} \;
+    find /dist/packages -name "*.rpm" -exec ls -lh {} \;
 
 # Stage 3: Test - Install and verify the package
 FROM fedora:${FEDORA_VERSION} AS test
@@ -77,7 +77,7 @@ RUN dnf update -y && \
     dnf clean all
 
 # Copy and install the built package
-COPY --from=packages /packages/RPMS/ /tmp/rpms/
+COPY --from=packages /dist/packages/RPMS/ /tmp/rpms/
 
 # Install the package
 RUN dnf install -y /tmp/rpms/*/*.rpm
@@ -94,5 +94,5 @@ RUN echo "=== Testing Plugin Load ===" && \
     ldconfig && \
     ldd /usr/lib*/sasl2/liboauth2.so || echo "Plugin dependencies checked"
 
-WORKDIR /packages
-CMD ["sh", "-c", "echo 'RPM build and test completed successfully' && find /packages -name '*.rpm' -exec ls -lh {} \\;"]
+WORKDIR /dist/packages
+CMD ["sh", "-c", "echo 'RPM build and test completed successfully' && find /dist/packages -name '*.rpm' -exec ls -lh {} \\;"]

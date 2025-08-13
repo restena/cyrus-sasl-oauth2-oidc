@@ -48,22 +48,22 @@ RUN dpkg-buildpackage -us -uc -b
 FROM debian:trixie-slim AS packages
 
 # Copy built packages from builder stage
-COPY --from=builder /cyrus-sasl-oauth2-oidc_*.deb /packages/
-COPY --from=builder /cyrus-sasl-oauth2-oidc_*.changes /packages/
-COPY --from=builder /cyrus-sasl-oauth2-oidc_*.buildinfo /packages/
+COPY --from=builder /cyrus-sasl-oauth2-oidc_*.deb /dist/packages/
+COPY --from=builder /cyrus-sasl-oauth2-oidc_*.changes /dist/packages/
+COPY --from=builder /cyrus-sasl-oauth2-oidc_*.buildinfo /dist/packages/
 
 # Install lintian for package validation
 RUN apt-get update && apt-get install -y lintian && rm -rf /var/lib/apt/lists/*
 
 # Validate packages
-RUN cd /packages && \
+RUN cd /dist/packages && \
     for deb in *.deb; do \
         echo "Validating $deb..."; \
         lintian --no-tag-display-limit "$deb" || true; \
     done
 
 # Set default command to list packages
-CMD ["ls", "-la", "/packages/"]
+CMD ["ls", "-la", "/dist/packages/"]
 
 # Stage 3: Runtime test environment (optional)
 FROM debian:trixie-slim AS test

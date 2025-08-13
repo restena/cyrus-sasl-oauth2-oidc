@@ -55,7 +55,7 @@ echo "   Target: $TARGET"
 echo "   Dockerfile: $DOCKERFILE"
 
 # Create packages directory
-mkdir -p packages
+mkdir -p dist/packages
 
 # Build the Docker image
 echo "📦 Building Docker image..."
@@ -82,26 +82,26 @@ fi
 if [ "$TARGET" = "packages" ]; then
     # Extract packages from the container
     echo "📤 Extracting packages..."
-    docker run --rm -v "$(pwd)/packages:/output" \
+    docker run --rm -v "$(pwd)/dist/packages:/output" \
         "$IMAGE_NAME:$OS-$VERSION-$ARCH" \
-        sh -c "cp -r /packages/* /output/"
+        sh -c "cp -r /dist/packages/* /output/"
 
-    echo "✅ Packages extracted to ./packages/"
+    echo "✅ Packages extracted to ./dist/packages/"
     echo "📋 Built packages:"
-    find packages -name "*.*" -type f -exec ls -lh {} \;
+    find dist/packages -name "*.*" -type f -exec ls -lh {} \;
 
     # Run linting validation
     echo "🔍 Running package validation..."
     case $OS in
         debian)
             echo "Running lintian validation..."
-            docker run --rm -v "$(pwd)/packages:/packages" \
+            docker run --rm -v "$(pwd)/dist/packages:/packages" \
                 "$IMAGE_NAME:$OS-$VERSION-$ARCH" \
                 sh -c "find /packages -name '*.deb' -exec lintian {} \;" || true
             ;;
         fedora|rhel)
             echo "Running rpmlint validation..."
-            docker run --rm -v "$(pwd)/packages:/packages" \
+            docker run --rm -v "$(pwd)/dist/packages:/packages" \
                 "$IMAGE_NAME:$OS-$VERSION-$ARCH" \
                 sh -c "find /packages -name '*.rpm' -exec rpmlint {} \;" || true
             ;;

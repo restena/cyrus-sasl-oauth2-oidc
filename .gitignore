@@ -22,8 +22,8 @@ Makefile
 Makefile.in
 .deps/
 .libs/
-dist/
-packages/
+dist/*
+
 
 # Build artifacts
 *.o
